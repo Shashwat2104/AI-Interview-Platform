@@ -193,7 +193,7 @@ This project is licensed under the **MIT License**.
 ## 🙋‍♂️ Author / Maintainer
 
 **Your Name**
-[GitHub](https://github.com/yourusername) | [Website](#) | [Contact](#)
+[GitHub](https://github.com/Shashwat2104/) | [Website](#) | [Contact](#)
 
 ---
 
