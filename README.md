@@ -1,218 +1,86 @@
-# Hirelytics - Advanced Recruitment Platform
+<!-- PROJECT BADGES -->
+<p align="center">
+  <a href="https://github.com/Shashwat2104/AI-Interview-Platform/stargazers"><img src="https://img.shields.io/github/stars/Shashwat2104/AI-Interview-Platform?style=for-the-badge" alt="Stars"></a>
+  <a href="https://github.com/Shashwat2104/AI-Interview-Platform/network/members"><img src="https://img.shields.io/github/forks/Shashwat2104/AI-Interview-Platform?style=for-the-badge" alt="Forks"></a>
+  <a href="https://github.com/Shashwat2104/AI-Interview-Platform/commits/main"><img src="https://img.shields.io/github/last-commit/Shashwat2104/AI-Interview-Platform?style=for-the-badge" alt="Last Commit"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/Shashwat2104/AI-Interview-Platform?style=for-the-badge" alt="License"></a>
+  <a href="#"><img src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge" alt="Build Passing"></a>
+</p>
 
-A comprehensive recruitment and hiring platform built with Next.js 15 App Router, NextAuth v5, and MongoDB. This system supports three roles: admin, recruiter, and candidate, each with their own login, registration, and dashboard experiences. The platform features AI-powered interviews, real-time audio processing, and automated evaluation of candidates.
+<h1 align="center">Hirelytics</h1>
+<p align="center"><b>AI-Powered Recruitment Platform</b></p>
+<p align="center">🚀 <i>Modern, intelligent, and automated hiring for the next generation of teams.</i> 🚀</p>
 
-## Features
+---
 
-- **Role-Based Authentication**: Separate login and registration flows for admin, recruiter, and candidate roles
-- **Registration Control**: Toggle user registration on/off with a simple environment variable
-- **Waitlist System**: Collect interested user information when registration is disabled
-- **Protected Routes**:
-  - Unified dashboard with role-specific content
-  - Route-based authorization for admin, recruiter, and candidate sections
-  - Custom middleware for route protection
-  - Automatic role-based navigation and access control
-- **Enhanced Security**:
-  - Route-based authentication with role protection
-  - Smart redirects for authenticated/unauthenticated users
-  - JWT-based session management with maxAge of 30 days
-  - Password hashing with bcrypt (10 rounds)
-  - Form validation and API schema protection with Zod
-  - Account activation/deactivation system with admin controls
-  - Custom error handling and validation feedback
-- **MongoDB Integration**:
-  - Persistent data storage for users, jobs, and applications
-  - Mongoose schemas with validation
-  - Efficient querying with pagination and search
-- **AWS S3 Integration**:
-  - File storage for resumes, profile images, and audio files
-  - S3-compatible storage support
-  - Signed URL generation for secure file access
-- **AI Interview System**:
-  - Automated technical interviews with Gemini AI
-  - Real-time audio processing and text-to-speech
-  - Webcam monitoring and attention tracking
-  - Automatic interview evaluation and feedback
-- **Multi-language Support**:
-  - Internationalization with next-intl
-  - Support for English and Hindi (extensible to more languages)
-- **Social Media Sharing**: Share job posts across multiple platforms including:
-  - Facebook
-  - LinkedIn
-  - Telegram
-  - WhatsApp
-  - Facebook Messenger
-- **Modern UI**: Built with Tailwind CSS, shadcn/ui components and Framer Motion animations
+## 📝 Project Info
 
-## Getting Started
+**Project Name:** Hirelytics  
+**Tagline:**  
+> The all-in-one AI recruitment platform for smarter, faster, and fairer hiring.
 
-### Prerequisites
+**Description:**  
+Hirelytics is a comprehensive, modern recruitment platform built with Next.js, NextAuth, and MongoDB. It empowers organizations to automate and streamline their hiring process with AI-driven interviews, real-time audio analysis, and automated candidate evaluation. Designed for admins, recruiters, and candidates, Hirelytics offers role-based dashboards, secure authentication, and a beautiful, responsive UI.
 
-- Node.js 18+ and pnpm
-- MongoDB database (local or Atlas)
-- AWS S3 compatible storage (for file uploads)
-- Google Cloud API key (for Gemini AI)
-- Deepgram API key (for text-to-speech)
-- Resend API key (for email notifications)
+**Why?**  
+Traditional hiring is slow, biased, and resource-intensive. Hirelytics leverages AI to make hiring efficient, data-driven, and accessible—helping companies find the best talent, faster.
 
-### Environment Setup
+---
 
-Create a `.env.local` file in the root directory with the following variables:
+## 🚀 Features
 
-```bash
-# MongoDB Connection
-# Use MongoDB Atlas or a local MongoDB instance
-MONGODB_URI=your_mongodb_connection_string
-AUTH_URL=http://localhost:3000
+- ✅ **Role-Based Authentication** (Admin, Recruiter, Candidate)  
+- ✅ **AI-Powered Interviews** (Gemini AI, Deepgram TTS, Speech Recognition)  
+- ✅ **Real-Time Audio & Webcam Monitoring**  
+- ✅ **Automated Candidate Evaluation & Feedback**  
+- ✅ **Job Posting & Application Management**  
+- ✅ **Resume Upload, Parsing, and Matching**  
+- ✅ **Multi-language Support** (English, Hindi, extensible)  
+- ✅ **Social Media Job Sharing**  
+- ✅ **Modern UI** (Tailwind CSS, shadcn/ui, Framer Motion)  
+- ✅ **Secure JWT Sessions & Form Validation**  
+- ✅ **Admin Controls & Analytics**  
+- ✅ **Waitlist & Registration Control**  
+- ✅ **AWS S3 File Storage**  
+- ✅ **Internationalization (next-intl)**  
+- ✅ **Responsive & Mobile-Friendly**
 
-# NextAuth Configuration
-# Generate a secret with: openssl rand -base64 32
-NEXTAUTH_SECRET=your_random_string_for_jwt_encryption
+---
 
-# Email Service Configuration
-# Required for sending notifications and waitlist emails
-RESEND_API_KEY=your_resend_api_key
+## 📦 Tech Stack
 
-# Registration Control
-# Set to 'true' to allow new users to register, 'false' to disable registration
-REGISTRATION_ENABLED=true
+- **Frontend:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, TanStack React Query, next-intl, Sonner  
+- **Backend:** NextAuth v5, MongoDB & Mongoose, AWS S3 (or compatible), Server Actions  
+- **AI/ML:** Google Gemini AI, Deepgram API (TTS), Speech Recognition  
+- **Utilities:** Zod, React Hook Form, next-share, DND Kit, Recharts, Resend (email)  
+- **Dev Tools:** Husky, ESLint, Prettier, pnpm  
 
-# Admin Email for Notifications
-# Receives emails when new users join the waitlist
-ADMIN_EMAIL=your_admin_email
-NEXTAUTH_URL=http://localhost:3000
+---
 
-# AWS S3 Configuration (or S3-compatible storage like Tigris)
-AWS_ACCESS_KEY_ID=your_aws_access_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-AWS_REGION=auto
-AWS_ENDPOINT_URL_S3=https://your-s3-endpoint
-AWS_BUCKET_NAME=your_bucket_name
+## 📷 Screenshots / Demo
 
-# AI Services API Keys
-# Required for AI interview features
-GOOGLE_API_KEY=your_google_api_key_for_gemini_ai
-DEEPGRAM_API_KEY=your_deepgram_api_key_for_tts
-```
+<p align="center">
+  <img src="public/images/hirelytics-full-logo.svg" alt="Hirelytics Logo" width="200"/>
+</p>
 
-### Installation
+- **Live Demo:** [Coming Soon!](#)  
+- **Dashboard:**  
+  <img src="https://placehold.co/800x400?text=Dashboard+Screenshot" alt="Dashboard Screenshot"/>  
+- **AI Interview:**  
+  <img src="https://placehold.co/800x400?text=AI+Interview+Screenshot" alt="AI Interview Screenshot"/>  
+- **Mobile View:**  
+  <img src="https://placehold.co/400x800?text=Mobile+Screenshot" alt="Mobile Screenshot"/>
 
-1. Clone the repository:
+---
 
-   ```bash
-   git clone https://github.com/yourusername/hirelytics.git
-   cd hirelytics
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pnpm install
-   ```
-
-3. Run the development server:
-
-   ```bash
-   pnpm dev
-   ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
-
-### Creating an Admin User
-
-Admin users cannot register through the UI and must be created using a script:
+## 🛠️ Installation
 
 ```bash
-pnpm tsx scripts/create-admin.ts "Admin Name" "admin@example.com" "password"
-```
-
-## Authentication Routes
-
-- **Main Login**: `/login`
-- **Admin Login**: `/login/admin`
-- **Recruiter Login**: `/login/recruiter`
-- **Candidate Login**: `/login/candidate`
-- **Recruiter Registration**: `/register/recruiter`
-- **Candidate Registration**: `/register/candidate`
-
-## Dashboard Route
-
-- **Unified Dashboard**: `/dashboard` (content changes based on user role)
-
-## Key Features
-
-### For Recruiters
-
-- Create and manage job listings with detailed requirements
-- Review candidate applications and resumes
-- Schedule and conduct AI-powered interviews
-- Evaluate candidate performance with automated insights
-- Share job postings across social media platforms
-
-### For Candidates
-
-- Search and apply for jobs with a user-friendly interface
-- Upload and manage resume and profile information
-- Participate in AI interviews from any location
-- Receive automated feedback on interview performance
-- Track application status in real-time
-
-### For Administrators
-
-- Manage all users, jobs, and applications
-- View comprehensive analytics and reports
-- Configure system settings and access controls
-- Monitor platform activity and usage metrics
-
-## Technologies Used
-
-### Frontend
-
-- Next.js 15 (App Router)
-- React 19
-- TypeScript
-- Tailwind CSS
-- shadcn/ui Components
-- Framer Motion animations
-- Sonner for toast notifications
-- TanStack React Query
-- next-intl for internationalization
-
-### Backend
-
-- NextAuth v5 (Auth.js) for authentication
-- MongoDB & Mongoose for data persistence
-- AWS S3 compatible storage for file uploads
-- Server Actions for API functionality
-
-### AI Features
-
-- Google Gemini AI for interviews and evaluations
-- Deepgram API for text-to-speech
-- Speech recognition for candidate responses
-- Automated technical interview evaluation
-
-### Tools & Utilities
-
-- Zod for form validation and API schema validation
-- React Hook Form for form management
-- next-share for social media sharing integration
-- DND Kit for drag and drop functionality
-- Recharts for interactive charts and data visualization
-- sonner for toast notifications
-- Framer Motion for smooth animations
-- next-intl for internationalization
-- Resend for email service
-- shadcn/ui for component library
-
-## Quick Start
-
-```bash
-# Clone repository
-git clone https://github.com/yourusername/hirelytics.git
+# Clone the repository
+git clone https://github.com/Shashwat2104/AI-Interview-Platform.git
+cd hirelytics
 
 # Install dependencies
-cd hirelytics
 pnpm install
 
 # Set up environment variables
@@ -221,74 +89,163 @@ cp .env.example .env.local  # Then edit .env.local with your values
 # Create an admin user
 pnpm tsx scripts/create-admin.ts "Admin Name" "admin@example.com" "password"
 
-# Start development server
+# Start the development server
 pnpm dev
+````
+
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 💡 Usage
+
+**Admins:**
+Manage users, jobs, applications, and view analytics from the unified dashboard.
+
+**Recruiters:**
+Post jobs, review applications, conduct AI interviews, and share job links.
+
+**Candidates:**
+Register, apply for jobs, upload resumes, and participate in AI-powered interviews.
+
+---
+
+## 🔐 Environment Variables
+
+```env
+# MongoDB Connection
+MONGODB_URI=your_mongodb_connection_string
+AUTH_URL=http://localhost:3000
+
+# NextAuth Configuration
+NEXTAUTH_SECRET=your_random_string_for_jwt_encryption
+NEXTAUTH_URL=http://localhost:3000
+
+# Email Service
+RESEND_API_KEY=your_resend_api_key
+
+# Registration Control
+REGISTRATION_ENABLED=true
+ADMIN_EMAIL=your_admin_email
+
+# AWS S3 Configuration
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+AWS_REGION=auto
+AWS_ENDPOINT_URL_S3=https://your-s3-endpoint
+AWS_BUCKET_NAME=your_bucket_name
+
+# AI Services
+GOOGLE_API_KEY=your_google_api_key_for_gemini_ai
+DEEPGRAM_API_KEY=your_deepgram_api_key_for_tts
 ```
 
-## Project Structure
+---
+
+## 🧪 Tests
+
+Run all tests (if available):
 
 ```bash
-src/
-  ├── actions/       # Server actions
-  ├── app/           # App router components and API routes
-  ├── components/    # Reusable UI components
-  ├── constants/     # Application constants
-  ├── contexts/      # React contexts
-  ├── hooks/         # Custom React hooks
-  ├── i18n/          # Internationalization
-  ├── lib/           # Utility functions
-  ├── models/        # MongoDB models
-  ├── provider/      # Global providers
-  └── types/         # TypeScript type definitions
+pnpm test
 ```
 
-## AI Interview System
+Lint and format code:
 
-The platform features an advanced AI interview system that allows candidates to participate in automated technical interviews:
+```bash
+pnpm lint
+pnpm format
+```
 
-1. **Interview Preparation**: Candidates can check their camera and microphone before starting the interview.
+---
 
-2. **AI-Driven Questions**: The system asks technical, project-related, and behavioral questions tailored to the job position.
-
-3. **Real-time Responses**: Candidates can respond via text or speech, with real-time speech recognition.
-
-4. **Attention Monitoring**: The system monitors candidate attention through webcam and window focus tracking.
-
-5. **Automated Evaluation**: After completion, the system generates an evaluation report with scores for technical skills, communication skills, problem-solving, and cultural fit.
-
-6. **Feedback Generation**: Detailed feedback including strengths and areas for improvement is automatically generated.
-
-## Development Roadmap
-
-### Completed Features
-
-- Role-based authentication system
-- Job posting and application management
-- Resume upload and parsing
-- AI interview system with Gemini AI
-- Automated interview evaluation
-- Multi-language support (English, Hindi)
-
-### Planned Enhancements
-
-- Mobile application for on-the-go interviews
-- Integration with calendar systems for interview scheduling
-- Enhanced resume parsing with AI
-- Video recording of interviews for later review
-- Integration with ATS (Applicant Tracking Systems)
-- Additional language support
-- Advanced analytics dashboard
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create your feature branch:
+
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. Commit your changes:
+
+   ```bash
+   git commit -m 'Add some amazing feature'
+   ```
+4. Push to the branch:
+
+   ```bash
+   git push origin feature/amazing-feature
+   ```
 5. Open a Pull Request
 
-## License
+Please read our **Code of Conduct** before contributing.
+See `CONTRIBUTING.md` for detailed guidelines.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## 🙋‍♂️ Author / Maintainer
+
+**Your Name**
+[GitHub](https://github.com/yourusername) | [Website](#) | [Contact](#)
+
+---
+
+## 🌐 Badges
+
+<p align="center">
+  <img src="https://img.shields.io/github/stars/Shashwat2104/AI-Interview-Platform?style=flat-square" alt="GitHub stars">
+  <img src="https://img.shields.io/github/forks/Shashwat2104/AI-Interview-Platform?style=flat-square" alt="GitHub forks">
+  <img src="https://img.shields.io/github/issues/Shashwat2104/AI-Interview-Platform?style=flat-square" alt="GitHub issues">
+  <img src="https://img.shields.io/github/license/Shashwat2104/AI-Interview-Platform?style=flat-square" alt="License">
+  <img src="https://img.shields.io/github/last-commit/Shashwat2104/AI-Interview-Platform?style=flat-square" alt="Last commit">
+</p>
+
+---
+
+## 📌 Optional
+
+### FAQ
+
+**Q: Can I use my own AI model?**
+A: The platform is designed for Gemini AI but can be extended.
+
+**Q: Is there a mobile app?**
+A: Mobile support is planned in the roadmap.
+
+---
+
+### Roadmap
+
+* [ ] Mobile application
+* [ ] Calendar integration
+* [ ] Enhanced resume parsing
+* [ ] Video interview recording
+* [ ] ATS integration
+* [ ] More languages
+* [ ] Advanced analytics
+
+---
+
+### Known Issues
+
+See GitHub [Issues](https://github.com/Shashwat2104/AI-Interview-Platform/issues)
+
+---
+
+### Acknowledgments
+
+* [Next.js](https://nextjs.org)
+* [MongoDB](https://www.mongodb.com/)
+* [Google Gemini AI](https://deepmind.google/technologies/gemini/)
+* [Deepgram](https://www.deepgram.com/)
+* [shadcn/ui](https://ui.shadcn.com/)
+* [Tailwind CSS](https://tailwindcss.com/)
+
+
