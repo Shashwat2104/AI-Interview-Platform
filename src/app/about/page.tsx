@@ -142,6 +142,35 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </div>
+      {/* Developer Section */}
+      <div className="my-16 flex flex-col items-center justify-center text-center">
+        <h2 className="text-2xl font-bold mb-2">About the Developer</h2>
+        <p className="mb-2">
+          This website was developed by <span className="font-semibold text-primary">Shashwat</span>
+          .
+        </p>
+        <div className="flex gap-4 justify-center mb-2">
+          <a
+            href="https://github.com/Shashwat2104"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-primary"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://leetcode.com/u/shashwatmahender2104/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-primary"
+          >
+            LeetCode
+          </a>
+        </div>
+        <p className="text-muted-foreground text-sm">
+          Passionate about building modern, scalable web applications.
+        </p>
+      </div>
       <Footer />
     </div>
   );

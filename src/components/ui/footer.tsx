@@ -9,6 +9,18 @@ export function Footer() {
 
   return (
     <footer className="w-full bg-card py-16 relative overflow-hidden">
+      {/* Developer Credit */}
+      <div className="absolute top-2 right-4 z-20 text-xs text-muted-foreground">
+        Developed by{' '}
+        <a
+          href="https://github.com/Shashwat2104"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-primary"
+        >
+          Shashwat
+        </a>
+      </div>
       {/* Background gradients and patterns */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background/80"></div>
@@ -33,6 +45,11 @@ export function Footer() {
             <h2 className="text-2xl font-bold">{t('title')}</h2>
           </div>
           <p className="max-w-md text-center text-muted-foreground">{t('footer.description')}</p>
+          <div className="mt-4 text-sm">
+            <a href="/credits" className="underline hover:text-primary">
+              Meet the Developer
+            </a>
+          </div>
         </div>
 
         <div className="grid gap-8 md:grid-cols-4">
@@ -231,6 +248,7 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             {t('footer.copyright', { year: new Date().getFullYear() })}
           </p>
+          <p className="text-xs mt-2 text-muted-foreground">Made with ❤️ by Shashwat</p>
         </div>
       </div>
     </footer>

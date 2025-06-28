@@ -26,9 +26,12 @@ export const metadata: Metadata = {
   description:
     'Our AI-driven platform transforms the recruitment process from job posting to candidate selection. Automate interviews, analyze resumes, and make data-driven hiring decisions.',
   icons: {
-    icon: [{ url: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' }],
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml', sizes: 'any', title: 'Developed by Shashwat' },
+    ],
     apple: '/images/favicon.svg',
   },
+  authors: [{ name: 'Shashwat', url: 'https://github.com/Shashwat2104' }],
   // manifest: "/manifest.json",
   // themeColor: "#0C4A6E",
   // openGraph: {
@@ -54,6 +57,12 @@ export default async function RootLayout({
   const locale = await getLocale();
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <meta name="author" content="Shashwat" />
+        <meta property="og:site_name" content="Hirelytics by Shashwat" />
+        <meta name="twitter:creator" content="@Shashwat" />
+        <script dangerouslySetInnerHTML={{ __html: `console.log('Developed by Shashwat')` }} />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextTopLoader color="hsl(var(--primary))" />
         <RootProvider>
@@ -62,6 +71,9 @@ export default async function RootLayout({
             <MicrosoftClarity />
             <PostHogScript />
             <Analytics />
+            {/* Easter Egg: Press 'D' to see developer credit */}
+            {/* Easter Egg and SplashScreen are client components, so render them only in client-side trees */}
+            {/* <EasterEgg /> and <SplashScreen /> should be imported and rendered in a client boundary, not here */}
             <div className="flex-1">{children}</div>
           </div>
           <Toaster richColors />

@@ -1,11 +1,15 @@
 {
   "name": "Hirelytics",
   "short_name": "Hirelytics",
-  "description": "AI-driven interview and recruitment platform",
+  "description": "AI-driven interview and recruitment platform. Developed by Shashwat.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#0C4A6E",
+  "developer": {
+    "name": "Shashwat",
+    "url": "https://github.com/Shashwat2104"
+  },
   "icons": [
     {
       "src": "/images/favicon.svg",

@@ -1,3 +1,6 @@
+// Developed by Shashwat (https://github.com/Shashwat2104)
+// Source code copyright (c) 2025 Shashwat
+// ...existing code...
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { z } from 'zod';

@@ -16,7 +16,8 @@
 ## 📝 Project Info
 
 **Project Name:** Hirelytics  
-**Tagline:**  
+**Tagline:**
+
 > The all-in-one AI recruitment platform for smarter, faster, and fairer hiring.
 
 **Description:**  
@@ -29,31 +30,31 @@ Traditional hiring is slow, biased, and resource-intensive. Hirelytics leverages
 
 ## 🚀 Features
 
-- ✅ **Role-Based Authentication** (Admin, Recruiter, Candidate)  
-- ✅ **AI-Powered Interviews** (Gemini AI, Deepgram TTS, Speech Recognition)  
-- ✅ **Real-Time Audio & Webcam Monitoring**  
-- ✅ **Automated Candidate Evaluation & Feedback**  
-- ✅ **Job Posting & Application Management**  
-- ✅ **Resume Upload, Parsing, and Matching**  
-- ✅ **Multi-language Support** (English, Hindi, extensible)  
-- ✅ **Social Media Job Sharing**  
-- ✅ **Modern UI** (Tailwind CSS, shadcn/ui, Framer Motion)  
-- ✅ **Secure JWT Sessions & Form Validation**  
-- ✅ **Admin Controls & Analytics**  
-- ✅ **Waitlist & Registration Control**  
-- ✅ **AWS S3 File Storage**  
-- ✅ **Internationalization (next-intl)**  
+- ✅ **Role-Based Authentication** (Admin, Recruiter, Candidate)
+- ✅ **AI-Powered Interviews** (Gemini AI, Deepgram TTS, Speech Recognition)
+- ✅ **Real-Time Audio & Webcam Monitoring**
+- ✅ **Automated Candidate Evaluation & Feedback**
+- ✅ **Job Posting & Application Management**
+- ✅ **Resume Upload, Parsing, and Matching**
+- ✅ **Multi-language Support** (English, Hindi, extensible)
+- ✅ **Social Media Job Sharing**
+- ✅ **Modern UI** (Tailwind CSS, shadcn/ui, Framer Motion)
+- ✅ **Secure JWT Sessions & Form Validation**
+- ✅ **Admin Controls & Analytics**
+- ✅ **Waitlist & Registration Control**
+- ✅ **AWS S3 File Storage**
+- ✅ **Internationalization (next-intl)**
 - ✅ **Responsive & Mobile-Friendly**
 
 ---
 
 ## 📦 Tech Stack
 
-- **Frontend:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, TanStack React Query, next-intl, Sonner  
-- **Backend:** NextAuth v5, MongoDB & Mongoose, AWS S3 (or compatible), Server Actions  
-- **AI/ML:** Google Gemini AI, Deepgram API (TTS), Speech Recognition  
-- **Utilities:** Zod, React Hook Form, next-share, DND Kit, Recharts, Resend (email)  
-- **Dev Tools:** Husky, ESLint, Prettier, pnpm  
+- **Frontend:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, TanStack React Query, next-intl, Sonner
+- **Backend:** NextAuth v5, MongoDB & Mongoose, AWS S3 (or compatible), Server Actions
+- **AI/ML:** Google Gemini AI, Deepgram API (TTS), Speech Recognition
+- **Utilities:** Zod, React Hook Form, next-share, DND Kit, Recharts, Resend (email)
+- **Dev Tools:** Husky, ESLint, Prettier, pnpm
 
 ---
 
@@ -63,11 +64,11 @@ Traditional hiring is slow, biased, and resource-intensive. Hirelytics leverages
   <img src="public/images/hirelytics-full-logo.svg" alt="Hirelytics Logo" width="200"/>
 </p>
 
-- **Live Demo:** [Coming Soon!](#)  
+- **Live Demo:** [Coming Soon!](#)
 - **Dashboard:**  
-  <img src="https://placehold.co/800x400?text=Dashboard+Screenshot" alt="Dashboard Screenshot"/>  
+  <img src="https://placehold.co/800x400?text=Dashboard+Screenshot" alt="Dashboard Screenshot"/>
 - **AI Interview:**  
-  <img src="https://placehold.co/800x400?text=AI+Interview+Screenshot" alt="AI Interview Screenshot"/>  
+  <img src="https://placehold.co/800x400?text=AI+Interview+Screenshot" alt="AI Interview Screenshot"/>
 - **Mobile View:**  
   <img src="https://placehold.co/400x800?text=Mobile+Screenshot" alt="Mobile Screenshot"/>
 
@@ -91,7 +92,7 @@ pnpm tsx scripts/create-admin.ts "Admin Name" "admin@example.com" "password"
 
 # Start the development server
 pnpm dev
-````
+```
 
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -167,16 +168,19 @@ pnpm format
    ```bash
    git checkout -b feature/amazing-feature
    ```
+
 3. Commit your changes:
 
    ```bash
    git commit -m 'Add some amazing feature'
    ```
+
 4. Push to the branch:
 
    ```bash
    git push origin feature/amazing-feature
    ```
+
 5. Open a Pull Request
 
 Please read our **Code of Conduct** before contributing.
@@ -223,13 +227,13 @@ A: Mobile support is planned in the roadmap.
 
 ### Roadmap
 
-* [ ] Mobile application
-* [ ] Calendar integration
-* [ ] Enhanced resume parsing
-* [ ] Video interview recording
-* [ ] ATS integration
-* [ ] More languages
-* [ ] Advanced analytics
+- [ ] Mobile application
+- [ ] Calendar integration
+- [ ] Enhanced resume parsing
+- [ ] Video interview recording
+- [ ] ATS integration
+- [ ] More languages
+- [ ] Advanced analytics
 
 ---
 
@@ -239,13 +243,24 @@ See GitHub [Issues](https://github.com/Shashwat2104/AI-Interview-Platform/issues
 
 ---
 
+---
+
+## 👨‍💻 Developer Credit
+
+This project was developed and maintained by [Shashwat](https://github.com/Shashwat2104).
+
+Connect:
+
+- [GitHub](https://github.com/Shashwat2104)
+- [LeetCode](https://leetcode.com/u/shashwatmahender2104/)
+
+---
+
 ### Acknowledgments
 
-* [Next.js](https://nextjs.org)
-* [MongoDB](https://www.mongodb.com/)
-* [Google Gemini AI](https://deepmind.google/technologies/gemini/)
-* [Deepgram](https://www.deepgram.com/)
-* [shadcn/ui](https://ui.shadcn.com/)
-* [Tailwind CSS](https://tailwindcss.com/)
-
-
+- [Next.js](https://nextjs.org)
+- [MongoDB](https://www.mongodb.com/)
+- [Google Gemini AI](https://deepmind.google/technologies/gemini/)
+- [Deepgram](https://www.deepgram.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
