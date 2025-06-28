@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function Custom404() {
   return (
@@ -6,9 +7,9 @@ export default function Custom404() {
       <h1 className="text-6xl font-bold mb-4">404</h1>
       <p className="text-lg mb-6">Oops! The page you are looking for does not exist.</p>
       <p className="text-muted-foreground text-sm mb-8">Made by Shashwat</p>
-      <a href="/" className="underline hover:text-primary">
+      <Link href="/" className="underline hover:text-primary">
         Go Home
-      </a>
+      </Link>
     </div>
   );
 }
