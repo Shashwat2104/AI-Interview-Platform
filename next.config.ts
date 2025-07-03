@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 's3.eu-north-1.amazonaws.com',
+        pathname: '/shashwat-ai-bot/**',
       },
       {
         protocol: 'https',
