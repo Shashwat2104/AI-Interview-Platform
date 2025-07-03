@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'eu2.contabostorage.com',
       },
+      {
+        protocol: 'https',
+        hostname: 's3.eu-north-1.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'shashwat-ai-bot.s3.eu-north-1.amazonaws.com',
+      },
     ],
   },
   async rewrites() {
