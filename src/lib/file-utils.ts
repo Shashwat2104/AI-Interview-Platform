@@ -43,19 +43,29 @@ export const uploadFileToServer = async (
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to upload file');
+      const message = `File upload failed at /api/upload. Server responded with status ${response.status}. Reason: ${errorData.message || 'Unknown error'}`;
+      console.error('[File Upload] ' + message, { fileName: file.name, fileSize: file.size });
+      throw new Error(message);
     }
 
     const result = await response.json();
 
     if (!result.success) {
-      throw new Error(result.message || 'Upload was not successful');
+      const message = `File upload to S3 was not successful. Reason: ${result.message || 'Unknown error'}`;
+      console.error('[File Upload] ' + message, { fileName: file.name, fileSize: file.size });
+      throw new Error(message);
     }
 
     return result.file;
   } catch (error) {
-    console.error('Error uploading file:', error);
-    throw error;
+    console.error('[File Upload] Unexpected error uploading file:', {
+      fileName: file.name,
+      fileSize: file.size,
+      error,
+    });
+    throw new Error(
+      `Unexpected error uploading file: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 };
 
@@ -76,10 +86,15 @@ export const processFileForStorage = async (
   try {
     // Upload file to server which handles S3 upload and base64 conversion
     const result = await uploadFileToServer(file);
-
     return result;
   } catch (error) {
-    console.error('Error processing file for storage:', error);
-    throw error;
+    console.error('[File Storage] Error processing file for storage:', {
+      fileName: file.name,
+      fileSize: file.size,
+      error,
+    });
+    throw new Error(
+      `Error processing file for storage: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 };

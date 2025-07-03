@@ -60,7 +60,8 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
       setIsLoading(true);
 
       try {
-        const response = await fetch('/api/ai/interview/init', {
+        const endpoint = '/api/ai/interview/init';
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -72,7 +73,9 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || 'Failed to initialize interview');
+          throw new Error(
+            `Interview initialization failed (endpoint: ${endpoint}, status: ${response.status})${errorData.error ? `: ${errorData.error}` : ''}`
+          );
         }
 
         const data = await response.json();
@@ -197,14 +200,15 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
           // After initialization, it's user's turn
           setIsUserTurn(true);
         }
-      } catch (error) {
-        console.error('Error initializing interview:', error);
-        toast.error('Failed to initialize interview. Using fallback greeting.');
+      } catch (error: any) {
+        const errorMsg = error instanceof Error ? error.message : JSON.stringify(error);
+        console.error('Error initializing interview:', errorMsg);
+        toast.error(`Failed to initialize interview. ${errorMsg}. Using fallback greeting.`);
 
         // Fallback message if initialization fails
         const fallbackMessage: Message = {
           id: Date.now().toString(),
-          text: `Hello! I'm Hirelytics AI, your interviewer for the position. Let's start with you introducing yourself briefly.`,
+          text: `Hello! I'm Hirelytics AI, your interviewer for the position. Let's start with you introducing yourself briefly. [Initialization failed: ${errorMsg}]`,
           sender: 'ai',
           timestamp: new Date(),
         };
@@ -318,7 +322,8 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
       }
 
       // Regular API call
-      const response = await fetch('/api/ai/interview/chat', {
+      const endpoint = '/api/ai/interview/chat';
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -332,7 +337,9 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to get interview response');
+        throw new Error(
+          `Interview chat failed (endpoint: ${endpoint}, status: ${response.status}, userMessage: "${sentMessage}")${errorData.error ? `: ${errorData.error}` : ''}`
+        );
       }
 
       const data = await response.json();
@@ -378,14 +385,15 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
           lastMsgId: aiMessage.id,
         });
       }
-    } catch (error) {
-      console.error('Error in interview chat:', error);
-      toast.error('Failed to get AI response');
+    } catch (error: any) {
+      const errorMsg = error instanceof Error ? error.message : JSON.stringify(error);
+      console.error('Error in interview chat:', errorMsg);
+      toast.error(`Failed to get AI response. ${errorMsg}`);
 
       // Add error message
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Sorry, this is Hirelytics AI. I encountered an error. Let's continue our conversation. What were you saying?",
+        text: `Sorry, this is Hirelytics AI. I encountered an error while processing your message ("${sentMessage}"). Let's continue our conversation. [Error: ${errorMsg}]`,
         sender: 'ai',
         timestamp: new Date(),
       };
@@ -413,19 +421,21 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
 
     try {
       // Clear existing chat history from database
-      const clearResponse = await fetch(
-        `/api/ai/interview/history?applicationId=${applicationId}`,
-        {
-          method: 'DELETE',
-        }
-      );
+      const clearEndpoint = `/api/ai/interview/history?applicationId=${applicationId}`;
+      const clearResponse = await fetch(clearEndpoint, {
+        method: 'DELETE',
+      });
 
       if (!clearResponse.ok) {
-        console.warn('Failed to clear interview history, continuing with restart');
+        const errorData = await clearResponse.json().catch(() => ({}));
+        console.warn(
+          `Failed to clear interview history (endpoint: ${clearEndpoint}, status: ${clearResponse.status})${errorData.error ? `: ${errorData.error}` : ''}`
+        );
       }
 
       // Re-initialize the interview
-      const response = await fetch('/api/ai/interview/init', {
+      const endpoint = '/api/ai/interview/init';
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -437,7 +447,10 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
       });
 
       if (!response.ok) {
-        throw new Error('Failed to restart interview');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          `Failed to restart interview (endpoint: ${endpoint}, status: ${response.status})${errorData.error ? `: ${errorData.error}` : ''}`
+        );
       }
 
       const data = await response.json();
@@ -464,14 +477,15 @@ export function useInterviewChat({ applicationId }: UseInterviewChatProps): UseI
       // After initialization, it's user's turn
       setIsUserTurn(true);
       toast.success('Interview restarted successfully!');
-    } catch (error) {
-      console.error('Error restarting interview:', error);
-      toast.error('Failed to restart interview. Using fallback greeting.');
+    } catch (error: any) {
+      const errorMsg = error instanceof Error ? error.message : JSON.stringify(error);
+      console.error('Error restarting interview:', errorMsg);
+      toast.error(`Failed to restart interview. ${errorMsg}. Using fallback greeting.`);
 
       // Fallback message if restart fails
       const fallbackMessage: Message = {
         id: Date.now().toString(),
-        text: `Hello, I'm Hirelytics AI. Let's restart our interview. Please introduce yourself briefly.`,
+        text: `Hello, I'm Hirelytics AI. Let's restart our interview. Please introduce yourself briefly. [Restart failed: ${errorMsg}]`,
         sender: 'ai',
         timestamp: new Date(),
       };

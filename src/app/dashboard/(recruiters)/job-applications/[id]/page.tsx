@@ -1113,10 +1113,10 @@ export default function JobApplicationDetailsPage() {
                                 <CarouselItem key={index}>
                                   <div className="flex items-center justify-center p-1 h-[80vh]">
                                     <div className="relative w-full h-full flex items-center justify-center">
-                                      <Image
+                                      <img
                                         src={image.signedUrl || ''}
                                         alt={`Monitoring image ${index + 1}`}
-                                        fill
+                                        // fill
                                         className="object-contain"
                                       />
                                       <div className="absolute bottom-4 left-0 right-0 text-center">

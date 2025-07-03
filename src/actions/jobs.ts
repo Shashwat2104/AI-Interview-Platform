@@ -68,9 +68,12 @@ export async function getJobs({
       nextPage: hasMore ? page + 1 : null,
     };
   } catch (error: unknown) {
-    console.error('Error fetching jobs:', error);
+    console.error('Error in getJobs:', {
+      error,
+      filter: { search, skills, location, page, limit },
+    });
     throw new Error(
-      `Failed to fetch jobs: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to fetch jobs in getJobs (filter: ${JSON.stringify({ search, skills, location, page, limit })}): ${error instanceof Error ? error.message : String(error)}`
     );
   }
 }
@@ -83,15 +86,15 @@ export async function getJobById(id: string) {
     const job = await Job.findOne({ _id: id }).lean();
 
     if (!job) {
-      throw new Error('Job not found');
+      throw new Error(`Job not found in getJobById (id: ${id})`);
     }
 
     // Serialize MongoDB document for passing to client components
     return JSON.parse(JSON.stringify(job));
   } catch (error: unknown) {
-    console.error('Error fetching job:', error);
+    console.error('Error in getJobById:', { error, id });
     throw new Error(
-      `Failed to fetch job: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to fetch job in getJobById (id: ${id}): ${error instanceof Error ? error.message : String(error)}`
     );
   }
 }
@@ -104,15 +107,15 @@ export async function getJobByUrlId(id: string) {
     const job = await Job.findOne({ urlId: id }).lean();
 
     if (!job) {
-      throw new Error('Job not found');
+      throw new Error(`Job not found in getJobByUrlId (urlId: ${id})`);
     }
 
     // Serialize MongoDB document for passing to client components
     return JSON.parse(JSON.stringify(job));
   } catch (error: unknown) {
-    console.error('Error fetching job:', error);
+    console.error('Error in getJobByUrlId:', { error, urlId: id });
     throw new Error(
-      `Failed to fetch job: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to fetch job in getJobByUrlId (urlId: ${id}): ${error instanceof Error ? error.message : String(error)}`
     );
   }
 }

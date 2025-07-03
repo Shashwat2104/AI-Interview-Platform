@@ -20,10 +20,9 @@ export async function generateGeminiText(
 
     return text;
   } catch (error) {
-    console.error('Error generating text with Gemini:', error);
-    throw new Error(
-      `Failed to generate text: ${error instanceof Error ? error.message : String(error)}`
-    );
+    const message = `[Gemini AI] Failed to generate text for model '${model}' with prompt: '${prompt}'. Reason: ${error instanceof Error ? error.message : String(error)}`;
+    console.error(message, { model, prompt, error });
+    throw new Error(message);
   }
 }
 

@@ -14,10 +14,12 @@ export async function textToSpeech(text: string): Promise<{
     const apiKey = process.env.DEEPGRAM_API_KEY;
 
     if (!apiKey) {
-      throw new Error('Deepgram API key is missing');
+      const message =
+        '[Deepgram TTS] API key is missing. Please set the DEEPGRAM_API_KEY environment variable.';
+      console.error(message);
+      throw new Error(message);
     }
 
-    // Updated URL format with model query parameter
     const response = await fetch('https://api.deepgram.com/v1/speak?model=aura-2-thalia-en', {
       method: 'POST',
       headers: {
@@ -31,7 +33,9 @@ export async function textToSpeech(text: string): Promise<{
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Deepgram API error (${response.status}): ${errorText}`);
+      const message = `[Deepgram TTS] API error (${response.status}): ${errorText}`;
+      console.error(message, { text: limitedText });
+      throw new Error(message);
     }
 
     // Get the audio data as blob
@@ -45,10 +49,13 @@ export async function textToSpeech(text: string): Promise<{
       audioUrl,
     };
   } catch (error) {
-    console.error('Text-to-speech conversion failed:', error);
+    console.error('[Deepgram TTS] Text-to-speech conversion failed:', { text, error });
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error:
+        error instanceof Error
+          ? error.message
+          : 'Unknown error occurred during text-to-speech conversion',
     };
   }
 }
@@ -65,10 +72,12 @@ export async function serverTextToSpeech(text: string): Promise<Buffer | null> {
     const apiKey = process.env.DEEPGRAM_API_KEY;
 
     if (!apiKey) {
-      throw new Error('Deepgram API key is missing');
+      const message =
+        '[Deepgram TTS] API key is missing. Please set the DEEPGRAM_API_KEY environment variable.';
+      console.error(message);
+      throw new Error(message);
     }
 
-    // Updated URL format with model query parameter
     const response = await fetch('https://api.deepgram.com/v1/speak?model=aura-2-thalia-en', {
       method: 'POST',
       headers: {
@@ -82,14 +91,16 @@ export async function serverTextToSpeech(text: string): Promise<Buffer | null> {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Deepgram API error (${response.status}): ${errorText}`);
+      const message = `[Deepgram TTS] API error (${response.status}): ${errorText}`;
+      console.error(message, { text: limitedText });
+      throw new Error(message);
     }
 
     // Get the audio data as array buffer
     const arrayBuffer = await response.arrayBuffer();
     return Buffer.from(arrayBuffer);
   } catch (error) {
-    console.error('Server text-to-speech conversion failed:', error);
+    console.error('[Deepgram TTS] Server text-to-speech conversion failed:', { text, error });
     return null;
   }
 }
