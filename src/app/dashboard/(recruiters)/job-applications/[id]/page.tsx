@@ -1075,10 +1075,12 @@ export default function JobApplicationDetailsPage() {
                       }}
                     >
                       <div className="aspect-video relative">
+                        {console.log('Monitoring Image URL:', image.signedUrl)}
                         <Image
                           src={
-                            image.signedUrl ||
-                            `/api/applications/${applicationId}/monitoring-image/${image.s3Key}`
+                            image.signedUrl
+                              ? decodeURIComponent(image.signedUrl)
+                              : `/api/applications/${applicationId}/monitoring-image/${image.s3Key}`
                           }
                           alt={`Monitoring image ${index + 1}`}
                           fill
