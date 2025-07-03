@@ -1075,15 +1075,15 @@ export default function JobApplicationDetailsPage() {
                       }}
                     >
                       <div className="aspect-video relative">
-                        {console.log('Monitoring Image URL:', image.signedUrl)}
-                        <Image
+                        {/* {console.log('Monitoring Image URL:', image.signedUrl)} */}
+                        <img
                           src={
                             image.signedUrl
                               ? decodeURIComponent(image.signedUrl)
                               : `/api/applications/${applicationId}/monitoring-image/${image.s3Key}`
                           }
                           alt={`Monitoring image ${index + 1}`}
-                          fill
+                          // fill
                           className="object-cover transition-transform group-hover:scale-105"
                         />
                       </div>
