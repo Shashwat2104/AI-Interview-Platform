@@ -1075,18 +1075,13 @@ export default function JobApplicationDetailsPage() {
                       }}
                     >
                       <div className="aspect-video relative">
-                        {/* {console.log('Monitoring Image URL:', image.signedUrl)} */}
                         <img
-                          src={
-                            image.signedUrl
-                              ? decodeURIComponent(image.signedUrl)
-                              : `/api/applications/${applicationId}/monitoring-image/${image.s3Key}`
-                          }
+                          src={image.signedUrl || ''}
                           alt={`Monitoring image ${index + 1}`}
-                          // fill
-                          className="object-cover transition-transform group-hover:scale-105"
+                          className="object-cover w-full h-full transition-transform group-hover:scale-105"
                         />
                       </div>
+
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
                         <Maximize2 className="text-white h-6 w-6" />
                       </div>
@@ -1118,8 +1113,7 @@ export default function JobApplicationDetailsPage() {
                                       <img
                                         src={image.signedUrl || ''}
                                         alt={`Monitoring image ${index + 1}`}
-                                        // fill
-                                        className="object-contain"
+                                        className="object-contain max-w-full max-h-full"
                                       />
                                       <div className="absolute bottom-4 left-0 right-0 text-center">
                                         <div className="inline-block bg-black/70 text-white text-sm px-2 py-1 rounded">
