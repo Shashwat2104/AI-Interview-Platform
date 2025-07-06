@@ -66,7 +66,8 @@ Traditional hiring is slow, biased, and resource-intensive. Hirelytics leverages
 
 - **Live Demo:** [Coming Soon!](#)
 - **Dashboard:**  
-  <img src="https://placehold.co/800x400?text=Dashboard+Screenshot" alt="Dashboard Screenshot"/>
+  <img width="1067" alt="Screenshot 2025-07-06 185703" src="https://github.com/user-attachments/assets/c83dc99d-59e4-4697-81a6-fc915b4425b0" />
+ alt="Dashboard Screenshot"/>
 - **AI Interview:**  
   <img src="https://placehold.co/800x400?text=AI+Interview+Screenshot" alt="AI Interview Screenshot"/>
 - **Mobile View:**  
