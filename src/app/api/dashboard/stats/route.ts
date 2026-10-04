@@ -18,16 +18,12 @@ export async function GET() {
     await connectToDatabase();
     const { role, id: userId } = session.user;
 
-    // Common statistics for all dashboards
-    const totalJobs = await Job.countDocuments({ isActive: true }).catch(() => 0);
-    const totalCandidates = await User.countDocuments({
-      role: 'candidate',
-      isActive: true,
-    }).catch(() => 0);
-    const totalRecruiters = await User.countDocuments({
-      role: 'recruiter',
-      isActive: true,
-    }).catch(() => 0);
+    // Common statistics for all dashboards — all three are independent, run in parallel
+    const [totalJobs, totalCandidates, totalRecruiters] = await Promise.all([
+      Job.countDocuments({ isActive: true }).catch(() => 0),
+      User.countDocuments({ role: 'candidate', isActive: true }).catch(() => 0),
+      User.countDocuments({ role: 'recruiter', isActive: true }).catch(() => 0),
+    ]);
 
     // Role-specific data
     switch (role) {
@@ -70,77 +66,71 @@ export async function GET() {
       case 'recruiter':
         const recruiterObjectId = new mongoose.Types.ObjectId(userId);
 
-        const myJobs = await Job.countDocuments({
-          recruiter: recruiterObjectId,
-          isActive: true,
-        }).catch(() => 0);
+        // Phase 1: fetch jobs — both queries are independent
+        const [myJobs, recruiterJobs] = await Promise.all([
+          Job.countDocuments({ recruiter: recruiterObjectId, isActive: true }).catch(() => 0),
+          Job.find({ recruiter: recruiterObjectId, isActive: true }).select('_id').catch(() => []),
+        ]);
 
-        const recruiterJobs = await Job.find({
-          recruiter: recruiterObjectId,
-          isActive: true,
-        })
-          .select('_id')
-          .catch(() => []);
         const jobIdStrings = recruiterJobs.map((job) => job._id.toString());
 
-        const totalApplications = await JobApplication.countDocuments({
-          jobId: { $in: jobIdStrings },
-        }).catch(() => 0);
-
-        const applicationsByStatus = await JobApplication.aggregate([
-          { $match: { jobId: { $in: jobIdStrings } } },
-          { $group: { _id: '$status', count: { $sum: 1 } } },
-        ]).catch(() => []);
-
-        const recentApplications = await JobApplication.aggregate([
-          { $match: { jobId: { $in: jobIdStrings } } },
-          { $sort: { createdAt: -1 } },
-          { $limit: 5 },
-          {
-            $lookup: {
-              from: 'jobs',
-              localField: 'jobId',
-              foreignField: '_id',
-              as: 'jobInfo',
+        // Phase 2: all three application queries are independent — run in parallel
+        const [totalApplications, applicationsByStatus, recentApplications] = await Promise.all([
+          JobApplication.countDocuments({ jobId: { $in: jobIdStrings } }).catch(() => 0),
+          JobApplication.aggregate([
+            { $match: { jobId: { $in: jobIdStrings } } },
+            { $group: { _id: '$status', count: { $sum: 1 } } },
+          ]).catch(() => []),
+          JobApplication.aggregate([
+            { $match: { jobId: { $in: jobIdStrings } } },
+            { $sort: { createdAt: -1 } },
+            { $limit: 5 },
+            {
+              $lookup: {
+                from: 'jobs',
+                localField: 'jobId',
+                foreignField: '_id',
+                as: 'jobInfo',
+              },
             },
-          },
-          {
-            $unwind: {
-              path: '$jobInfo',
-              preserveNullAndEmptyArrays: true,
+            {
+              $unwind: {
+                path: '$jobInfo',
+                preserveNullAndEmptyArrays: true,
+              },
             },
-          },
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'userId',
-              foreignField: '_id',
-              as: 'candidateInfo',
+            {
+              $lookup: {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'candidateInfo',
+              },
             },
-          },
-          {
-            $unwind: {
-              path: '$candidateInfo',
-              preserveNullAndEmptyArrays: true,
+            {
+              $unwind: {
+                path: '$candidateInfo',
+                preserveNullAndEmptyArrays: true,
+              },
             },
-          },
-          {
-            $project: {
-              _id: 1,
-              status: 1,
-              createdAt: 1,
-              jobInfo: {
-                title: { $ifNull: ['$jobInfo.title', 'Unknown Job'] },
-                companyName: {
-                  $ifNull: ['$jobInfo.companyName', 'Unknown Company'],
+            {
+              $project: {
+                _id: 1,
+                status: 1,
+                createdAt: 1,
+                jobInfo: {
+                  title: { $ifNull: ['$jobInfo.title', 'Unknown Job'] },
+                  companyName: {
+                    $ifNull: ['$jobInfo.companyName', 'Unknown Company'],
+                  },
+                },
+                candidateName: {
+                  $ifNull: ['$candidateInfo.name', '$candidateName'],
                 },
               },
-              candidateName: {
-                $ifNull: ['$candidateInfo.name', '$candidateName'],
-              },
             },
-          },
-        ]).catch(() => []);
+          ]).catch(() => []),
+        ]);
 
         return NextResponse.json({
           myJobs,

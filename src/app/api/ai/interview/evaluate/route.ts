@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
     `;
 
     // Generate evaluation
-    const evaluationResponse = await generateGeminiText(evaluationPrompt, 'gemini-2.0-flash-lite');
+    const evaluationResponse = await generateGeminiText(evaluationPrompt, 'gemini-3.5-flash-lite');
 
     // Parse the response to extract ratings and feedback
     const technicalMatch = evaluationResponse.match(/TECHNICAL_SKILLS:\s*(\d+)/);

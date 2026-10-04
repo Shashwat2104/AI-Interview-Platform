@@ -1,18 +1,7 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { auth } from '@/auth';
-
-// Create S3 client for server-side operations
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION!,
-  endpoint: process.env.AWS_ENDPOINT_URL_S3,
-  forcePathStyle: true,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-  },
-});
+import { getObjectUrl, putObject } from '@/lib/storage';
 
 export async function POST(req: NextRequest) {
   try {
@@ -51,29 +40,21 @@ export async function POST(req: NextRequest) {
     const timestamp = new Date().getTime();
     const fileName = `${timestamp}-${file.name.replace(/\s+/g, '-')}`;
     const key = `resumes/${timestamp.toString().slice(0, 6)}/${fileName}`;
-    const bucketName = process.env.AWS_BUCKET_NAME || 'hirelytics';
 
-    // Convert file to buffer for S3 upload
+    // Convert file to buffer for storage
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Upload to S3
-    await s3Client.send(
-      new PutObjectCommand({
-        Bucket: bucketName,
-        Key: key,
-        Body: buffer,
-        ContentType: file.type,
-      })
-    );
+    // Store file (S3 when configured, otherwise local filesystem)
+    const { bucket } = await putObject(key, buffer, file.type);
 
-    // Construct S3 URL
-    const fileUrl = `${process.env.AWS_ENDPOINT_URL_S3}/${bucketName}/${key}`;
+    // Build a browser-usable URL for the stored file
+    const fileUrl = await getObjectUrl(key, { contentType: file.type });
 
     // Convert file to base64 for database storage
     const base64 = Buffer.from(arrayBuffer).toString('base64');
 
-    // Return success response with file info and S3 key for generating signed URLs later
+    // Return success response with file info and storage key for generating URLs later
     return NextResponse.json({
       success: true,
       file: {
@@ -81,7 +62,7 @@ export async function POST(req: NextRequest) {
         fileName: fileName,
         base64: `data:${file.type};base64,${base64}`,
         key: key,
-        bucket: bucketName,
+        bucket: bucket,
       },
     });
   } catch (error) {

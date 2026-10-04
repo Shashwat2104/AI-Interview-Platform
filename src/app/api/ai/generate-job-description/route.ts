@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     // Use Gemini model with Vercel AI SDK
     const { text: generatedDescription } = await generateText({
-      model: google('gemini-2.0-flash-lite'),
+      model: google('gemini-3.5-flash-lite'),
       prompt: prompt,
     });
 

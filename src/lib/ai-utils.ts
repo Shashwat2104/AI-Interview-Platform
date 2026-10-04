@@ -5,16 +5,16 @@ import { generateText } from 'ai';
  * Generates text using Google's Gemini model via Vercel AI SDK
  *
  * @param prompt - The prompt to send to the model
- * @param model - The specific Gemini model to use (defaults to gemini-2.0-flash-lite)
+ * @param model - The specific Gemini model to use (defaults to gemini-3.5-flash-lite)
  * @returns The generated text response
  */
 export async function generateGeminiText(
   prompt: string,
-  model = 'gemini-2.0-flash-lite'
+  model = 'gemini-3.5-flash-lite'
 ): Promise<string> {
   try {
     const { text } = await generateText({
-      model: google(model as 'gemini-2.0-flash-lite'),
+      model: google(model as 'gemini-3.5-flash-lite'),
       prompt: prompt,
     });
 

@@ -1,17 +1,12 @@
-import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { NextRequest, NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
 
 import { auth } from '@/auth';
 import { generateGeminiText, parseGeminiMatchResponse } from '@/lib/ai-utils';
 import { connectToDatabase } from '@/lib/mongodb';
-import { createS3Client } from '@/lib/s3-client';
+import { getObjectBuffer } from '@/lib/storage';
 import Job from '@/models/job';
 import { JobApplication } from '@/models/job-application';
-
-// Create S3 client
-const s3Client = createS3Client();
 
 // Extract text from PDF
 async function extractTextFromPDF(pdfBuffer: Buffer): Promise<string> {
@@ -286,27 +281,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     if (application.s3Key && application.s3Bucket) {
       try {
-        // Get pre-signed URL
-        const command = new GetObjectCommand({
-          Bucket: application.s3Bucket,
-          Key: application.s3Key,
-        });
-
-        const signedUrl = await getSignedUrl(s3Client, command, {
-          expiresIn: 300,
-        });
-        console.log({ signedUrl });
-
-        // Fetch the PDF content
-        const response = await fetch(signedUrl);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch PDF: ${response.statusText}`);
-        }
-
-        const arrayBuffer = await response.arrayBuffer();
-        pdfBuffer = Buffer.from(arrayBuffer);
+        // Fetch the PDF content from storage (S3 or local)
+        pdfBuffer = await getObjectBuffer(application.s3Key);
       } catch (error) {
-        console.error('Error fetching PDF from S3:', error);
+        console.error('Error fetching PDF from storage:', error);
         return NextResponse.json({ error: 'Failed to retrieve PDF from storage' }, { status: 500 });
       }
     } else if (application.resumeBase64) {

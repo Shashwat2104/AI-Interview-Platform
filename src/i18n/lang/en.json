@@ -320,7 +320,8 @@
     "notCandidate": "Not a candidate? Login as a",
     "recruiterLoginDescription": "Enter your credentials to access the recruiter dashboard",
     "candidateLoginDescription": "Enter your credentials to access the candidate dashboard",
-    "adminLoginDescription": "Enter your credentials to access the admin dashboard"
+    "adminLoginDescription": "Enter your credentials to access the admin dashboard",
+    "demoAccounts": "Demo Accounts"
   },
   "Dashboard": {
     "welcome": "Welcome, {name}",

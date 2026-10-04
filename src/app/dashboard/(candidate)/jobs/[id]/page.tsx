@@ -7,6 +7,8 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 import { getJobByUrlId } from '@/actions/jobs';
+
+export const dynamic = 'force-dynamic';
 import { JobApplyButton } from '@/components/jobs/job-apply-button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';

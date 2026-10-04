@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { getJobById } from '@/actions/jobs';
+
+export const dynamic = 'force-dynamic';
 import { AIInterviewBackground } from '@/components/interview/ai-interview-background';
 import { InterviewClient } from '@/components/interview/interview-client';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';

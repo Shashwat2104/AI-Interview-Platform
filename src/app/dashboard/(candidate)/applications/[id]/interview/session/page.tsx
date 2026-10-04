@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { getJobById } from '@/actions/jobs';
+
+export const dynamic = 'force-dynamic';
 import { AIInterviewBackground } from '@/components/interview/ai-interview-background';
 import { InterviewCompletion } from '@/components/interview/interview-completion';
 import { InterviewSession } from '@/components/interview/interview-session';

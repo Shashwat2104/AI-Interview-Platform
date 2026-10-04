@@ -5,9 +5,23 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import { LoginForm } from '@/components/auth/login-form';
+import { DemoAccount, LoginForm } from '@/components/auth/login-form';
 import { AnimatedBackground } from '@/components/ui/animated-background';
 import { AnimatedAuthCard } from '@/components/ui/auth-card';
+
+const RECRUITER_DEMO: DemoAccount = {
+  label: 'Demo Recruiter',
+  email: 'recruiter@gmail.com',
+  password: 'admin@123',
+  role: 'recruiter',
+};
+
+const CANDIDATE_DEMO: DemoAccount = {
+  label: 'Demo Candidate',
+  email: 'candidate@gmail.com',
+  password: 'admin@123',
+  role: 'candidate',
+};
 
 export default function CandidateLoginPage() {
   const t = useTranslations('Auth');
@@ -58,7 +72,11 @@ export default function CandidateLoginPage() {
           colorScheme="blue"
           footer={footerContent}
         >
-          <LoginForm role="candidate" callbackUrl={redirectUrl || undefined} />
+          <LoginForm
+            role="candidate"
+            callbackUrl={redirectUrl || undefined}
+            demoAccounts={[CANDIDATE_DEMO, RECRUITER_DEMO]}
+          />
         </AnimatedAuthCard>
       </div>
     </AnimatedBackground>

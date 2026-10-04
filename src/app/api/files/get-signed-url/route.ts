@@ -1,12 +1,7 @@
-import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { auth } from '@/auth';
-import { createS3Client } from '@/lib/s3-client';
-
-// Create S3 client using the common function
-const s3Client = createS3Client();
+import { getObjectUrl } from '@/lib/storage';
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,17 +30,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generate a signed URL that expires in 15 minutes (900 seconds)
-    const command = new GetObjectCommand({
-      Bucket: bucket,
-      Key: key,
-    });
+    // Generate a URL that expires in 15 minutes (S3 mode)
+    const signedUrl = await getObjectUrl(key, { expiresIn: 900 });
 
-    const signedUrl = await getSignedUrl(s3Client, command, {
-      expiresIn: 900,
-    });
-
-    // Return the signed URL
+    // Return the URL
     return NextResponse.json({
       success: true,
       signedUrl,

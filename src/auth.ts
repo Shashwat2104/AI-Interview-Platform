@@ -1,11 +1,13 @@
 // Developed by Shashwat (https://github.com/Shashwat2104)
 // Source code copyright (c) 2025 Shashwat
 // ...existing code...
+import bcrypt from 'bcryptjs';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { z } from 'zod';
 
-import { UserRole } from '@/models/user';
+import { connectToDatabase } from '@/lib/mongodb';
+import User, { IUser, UserRole } from '@/models/user';
 
 // Define login schema for validation
 const loginSchema = z.object({
@@ -141,22 +143,25 @@ export const {
           // Validate credentials
           const { email, password, role } = loginSchema.parse(credentials);
 
-          // Make a request to our API route for authentication
-          const response = await fetch(`${process.env.AUTH_URL}/api/auth/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password, role }),
-          });
+          // Direct DB access — avoids an HTTP round-trip per login
+          await connectToDatabase();
 
-          const data = await response.json();
+          const user = (await User.findOne({ email, role }).select('+password')) as IUser | null;
 
-          if (!response.ok) {
-            throw new Error(data.error || 'Authentication failed');
-          }
+          if (!user) return null;
 
-          return data.user;
+          const isPasswordValid = await bcrypt.compare(password, user.password);
+          if (!isPasswordValid) return null;
+
+          if (user.isActive === false) return null;
+
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            isActive: user.isActive,
+          };
         } catch (error) {
           console.error('Auth error:', error);
           return null;

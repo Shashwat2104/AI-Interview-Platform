@@ -302,7 +302,7 @@ export async function GET(req: NextRequest) {
     );
 
     // Generate evaluation
-    const evaluationResponse = await generateGeminiText(evaluationPrompt, 'gemini-2.0-flash-lite');
+    const evaluationResponse = await generateGeminiText(evaluationPrompt, 'gemini-3.5-flash-lite');
 
     console.log(`[Interview Feedback] Successfully received AI evaluation, now parsing response`);
 

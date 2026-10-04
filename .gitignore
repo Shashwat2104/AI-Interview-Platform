@@ -33,9 +33,23 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# local storage fallback (used when S3 env vars are not configured)
+/.local-storage/
+
+# local MongoDB data (used when MONGODB_URI is not configured)
+/.mongo-data/
+
+# local dev server logs
+.dev-server.log
+.dev-server.pid
+
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.freebuff
+test & logs
+scripts

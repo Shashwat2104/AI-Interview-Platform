@@ -7,6 +7,8 @@ import { Card } from '@/components/ui/card';
 import { connectToDatabase } from '@/lib/mongodb';
 import { JobApplication } from '@/models/job-application';
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
   params: Promise<{ id: string }>;
 };

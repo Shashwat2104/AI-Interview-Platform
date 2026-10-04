@@ -1,22 +1,10 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
 import { auth } from '@/auth';
 import { connectToDatabase } from '@/lib/mongodb';
+import { putObject } from '@/lib/storage';
 import { JobApplication } from '@/models/job-application';
-
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION!,
-  endpoint: process.env.AWS_ENDPOINT_URL_S3,
-  forcePathStyle: true,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-});
-
-const bucketName = process.env.AWS_BUCKET_NAME || 'hirelytics';
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -31,18 +19,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // Convert base64 to buffer
     const buffer = Buffer.from(image.replace(/^data:image\/\w+;base64,/, ''), 'base64');
 
-    // Generate unique key for S3
+    // Generate unique key for storage
     const key = `monitoring/${id}/${uuidv4()}.jpg`;
 
-    // Upload to S3
-    await s3Client.send(
-      new PutObjectCommand({
-        Bucket: bucketName,
-        Key: key,
-        Body: buffer,
-        ContentType: 'image/jpeg',
-      })
-    );
+    // Store image (S3 when configured, otherwise local filesystem)
+    await putObject(key, buffer, 'image/jpeg');
 
     // Update application document
     await connectToDatabase();

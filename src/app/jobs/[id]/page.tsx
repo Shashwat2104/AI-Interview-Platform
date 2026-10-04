@@ -7,6 +7,8 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 import { getJobByUrlId } from '@/actions/jobs';
+
+export const dynamic = 'force-dynamic';
 import { ClientShareButton } from '@/components/jobs/client-share-button';
 import { JobApplyRedirectButton } from '@/components/jobs/job-apply-redirect-button';
 import { AnimatedBackground } from '@/components/ui/animated-background';

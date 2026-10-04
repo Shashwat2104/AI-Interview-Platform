@@ -1,11 +1,8 @@
-import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { S3Client } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { auth } from '@/auth';
 import { connectToDatabase } from '@/lib/mongodb';
-import { createS3Client } from '@/lib/s3-client';
+import { getObjectUrl } from '@/lib/storage';
 import Job from '@/models/job';
 import { JobApplication } from '@/models/job-application';
 
@@ -28,21 +25,16 @@ interface InterviewMessage {
   audioUrl?: string;
 }
 
-// Helper function to add signed URLs to audio messages
-async function addAudioSignedUrls(messages: InterviewMessage[], s3Client: S3Client) {
+// Helper function to add URLs to audio messages
+async function addAudioSignedUrls(messages: InterviewMessage[]) {
   // Process each message that has audioS3Key and audioS3Bucket
   return await Promise.all(
     messages.map(async (message) => {
       if (message.audioS3Key && message.audioS3Bucket) {
-        const command = new GetObjectCommand({
-          Bucket: message.audioS3Bucket,
-          Key: message.audioS3Key,
-          ResponseContentType: 'audio/mpeg',
-          ResponseContentDisposition: 'inline',
-        });
-
-        // Generate a URL that expires in 1 hour
-        const signedUrl = await getSignedUrl(s3Client, command, {
+        // Generate a URL that expires in 1 hour (S3 mode)
+        const signedUrl = await getObjectUrl(message.audioS3Key, {
+          contentType: 'audio/mpeg',
+          disposition: 'inline',
           expiresIn: 3600,
         });
 
@@ -91,19 +83,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     // Generate signed URLs for files stored in S3
     const appData = application.toJSON();
-    const s3Client = createS3Client();
-    const bucketName = appData.s3Bucket || process.env.AWS_S3_BUCKET || 'hirelytics-uploads';
-
     // Process monitoring images if they exist
     if (appData.monitoringImages && appData.monitoringImages.length > 0) {
       const monitoringImagesWithUrls = await Promise.all(
         appData.monitoringImages.map(async (image: MonitoringImage) => {
-          const command = new GetObjectCommand({
-            Bucket: bucketName,
-            Key: image.s3Key,
-          });
-
-          const signedUrl = await getSignedUrl(s3Client, command, {
+          const signedUrl = await getObjectUrl(image.s3Key, {
             expiresIn: 3600,
           });
 
@@ -119,24 +103,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     // Process interview chat history audio files if they exist
     if (appData.interviewChatHistory && appData.interviewChatHistory.length > 0) {
-      appData.interviewChatHistory = await addAudioSignedUrls(
-        appData.interviewChatHistory,
-        s3Client
-      );
+      appData.interviewChatHistory = await addAudioSignedUrls(appData.interviewChatHistory);
     }
 
-    // Generate signed URL for resume if s3Key exists
+    // Generate a URL for resume if s3Key exists
     if (appData.s3Key) {
-      const command = new GetObjectCommand({
-        Bucket: bucketName,
-        Key: appData.s3Key,
-      });
-
-      const signedResumeUrl = await getSignedUrl(s3Client, command, {
+      appData.signedResumeUrl = await getObjectUrl(appData.s3Key, {
         expiresIn: 3600,
       });
-
-      appData.signedResumeUrl = signedResumeUrl;
     }
 
     // Return application data with updated URLs
@@ -205,19 +179,11 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const appData = updatedApplication.toJSON();
 
     // Process S3 stored files to generate signed URLs
-    const s3Client = createS3Client();
-    const bucketName = appData.s3Bucket || process.env.AWS_S3_BUCKET || 'hirelytics-uploads';
-
     // Process monitoring images if they exist
     if (appData.monitoringImages && appData.monitoringImages.length > 0) {
       const monitoringImagesWithUrls = await Promise.all(
         appData.monitoringImages.map(async (image: MonitoringImage) => {
-          const command = new GetObjectCommand({
-            Bucket: bucketName,
-            Key: image.s3Key,
-          });
-
-          const signedUrl = await getSignedUrl(s3Client, command, {
+          const signedUrl = await getObjectUrl(image.s3Key, {
             expiresIn: 3600,
           });
 
@@ -233,24 +199,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
     // Process interview chat history audio files if they exist
     if (appData.interviewChatHistory && appData.interviewChatHistory.length > 0) {
-      appData.interviewChatHistory = await addAudioSignedUrls(
-        appData.interviewChatHistory,
-        s3Client
-      );
+      appData.interviewChatHistory = await addAudioSignedUrls(appData.interviewChatHistory);
     }
 
-    // Generate signed URL for resume if s3Key exists
+    // Generate a URL for resume if s3Key exists
     if (appData.s3Key) {
-      const command = new GetObjectCommand({
-        Bucket: bucketName,
-        Key: appData.s3Key,
-      });
-
-      const signedResumeUrl = await getSignedUrl(s3Client, command, {
+      appData.signedResumeUrl = await getObjectUrl(appData.s3Key, {
         expiresIn: 3600,
       });
-
-      appData.signedResumeUrl = signedResumeUrl;
     }
 
     // Get query parameter to include base64 data or not

@@ -33,12 +33,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData, TValue, TMeta = unknown> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey?: string;
   searchPlaceholder?: string;
   isLoading?: boolean;
+  meta?: TMeta;
   pagination?: {
     pageIndex: number;
     pageSize: number;
@@ -48,14 +49,15 @@ interface DataTableProps<TData, TValue> {
   };
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData, TValue, TMeta = unknown>({
   columns,
   data,
   searchKey,
   searchPlaceholder = 'Search...',
   isLoading = false,
+  meta,
   pagination,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, TValue, TMeta>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -92,6 +94,7 @@ export function DataTable<TData, TValue>({
           pageCount: pagination.pageCount,
         }
       : {}),
+    meta,
   });
 
   return (

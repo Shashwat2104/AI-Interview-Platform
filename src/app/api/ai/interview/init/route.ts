@@ -204,7 +204,7 @@ export async function POST(req: NextRequest) {
     `;
 
     // Generate initial greeting and question
-    const initialGreeting = await generateGeminiText(initPrompt, 'gemini-2.0-flash-lite');
+    const initialGreeting = await generateGeminiText(initPrompt, 'gemini-3.5-flash-lite');
 
     // Create a system message with job description and complete parsed resume data
     const systemMessage = `

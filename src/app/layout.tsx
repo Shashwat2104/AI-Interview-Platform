@@ -14,11 +14,13 @@ import RootProvider from '@/provider/root-provider';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -56,6 +58,9 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        {/* Preconnect to font origins to eliminate critical-path blocking */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <meta name="author" content="Shashwat" />
         <meta property="og:site_name" content="Hirelytics by Shashwat" />
         <meta name="twitter:creator" content="@Shashwat" />
