@@ -2,6 +2,8 @@
 
 > AI-powered interview and hiring platform built as a single Next.js 15 application.
 
+**Live deployment: [shashwat-ai-interview-platform.vercel.app](https://shashwat-ai-interview-platform.vercel.app/)**
+
 [Architecture Reference](./docs/hirelytics-architecture.html) · [Hiring Workflow](./docs/hirelytics-hiring-workflow.html) · [API Architecture](#api-architecture)
 
 ---
@@ -475,6 +477,9 @@ git push → (host CI) → pnpm install → next build → node server / Vercel
 `@vercel/analytics` and Vercel conventions indicate Vercel hosting; the environment variables
 above must be configured on the host. API route handlers and the AI/AWS paths require the
 Node.js runtime.
+
+The production deployment runs at
+**[https://shashwat-ai-interview-platform.vercel.app/](https://shashwat-ai-interview-platform.vercel.app/)**.
 
 ## Testing
 
