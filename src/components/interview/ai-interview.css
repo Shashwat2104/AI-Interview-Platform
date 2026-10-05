@@ -9,22 +9,22 @@
 
 /* Light mode specific styles */
 :root {
-  --ai-gradient-start: rgba(59, 130, 246, 0.05);
-  --ai-gradient-end: rgba(139, 92, 246, 0.1);
-  --ai-border: rgba(59, 130, 246, 0.2);
-  --ai-shadow: rgba(59, 130, 246, 0.15);
+  --ai-gradient-start: rgba(14, 116, 144, 0.04);
+  --ai-gradient-end: rgba(14, 116, 144, 0.08);
+  --ai-border: rgba(14, 116, 144, 0.2);
+  --ai-shadow: rgba(14, 116, 144, 0.12);
   --ai-text: #1e293b;
-  --ai-bg-pattern: rgba(59, 130, 246, 0.03);
+  --ai-bg-pattern: rgba(14, 116, 144, 0.03);
 }
 
 /* Dark mode specific styles */
 .dark {
-  --ai-gradient-start: rgba(59, 130, 246, 0.15);
-  --ai-gradient-end: rgba(139, 92, 246, 0.25);
-  --ai-border: rgba(59, 130, 246, 0.3);
-  --ai-shadow: rgba(59, 130, 246, 0.25);
+  --ai-gradient-start: rgba(45, 212, 191, 0.1);
+  --ai-gradient-end: rgba(45, 212, 191, 0.16);
+  --ai-border: rgba(45, 212, 191, 0.25);
+  --ai-shadow: rgba(45, 212, 191, 0.18);
   --ai-text: #f8fafc;
-  --ai-bg-pattern: rgba(59, 130, 246, 0.07);
+  --ai-bg-pattern: rgba(45, 212, 191, 0.06);
 }
 
 /* Shared styles */

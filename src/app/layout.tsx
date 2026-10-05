@@ -2,7 +2,7 @@ import './globals.css';
 
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Space_Grotesk } from 'next/font/google';
 import { getLocale } from 'next-intl/server';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'sonner';
@@ -19,6 +19,12 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-space-grotesk',
   subsets: ['latin'],
   display: 'swap',
 });
@@ -64,10 +70,11 @@ export default async function RootLayout({
         <meta name="author" content="Shashwat" />
         <meta property="og:site_name" content="Hirelytics by Shashwat" />
         <meta name="twitter:creator" content="@Shashwat" />
-        <script dangerouslySetInnerHTML={{ __html: `console.log('Developed by Shashwat')` }} />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NextTopLoader color="hsl(var(--primary))" />
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased`}
+      >
+        <NextTopLoader color="var(--primary)" />
         <RootProvider>
           <div className="relative flex min-h-screen flex-col">
             <FloatingControls />

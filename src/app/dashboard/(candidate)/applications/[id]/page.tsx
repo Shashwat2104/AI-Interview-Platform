@@ -30,10 +30,10 @@ export default async function ApplicationDetailsPage(props: Props) {
     type ApplicationStatus = 'pending' | 'reviewed' | 'accepted' | 'rejected';
 
     const statusColors = {
-      pending: 'bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/20',
-      reviewed: 'bg-blue-500/20 text-blue-500 hover:bg-blue-500/20',
-      accepted: 'bg-green-500/20 text-green-500 hover:bg-green-500/20',
-      rejected: 'bg-red-500/20 text-red-500 hover:bg-red-500/20',
+      pending: 'bg-warning/10 text-warning hover:bg-warning/10',
+      reviewed: 'bg-info/10 text-info hover:bg-info/10',
+      accepted: 'bg-success/10 text-success hover:bg-success/10',
+      rejected: 'bg-destructive/10 text-destructive hover:bg-destructive/10',
     };
 
     const statusColor =
@@ -112,7 +112,7 @@ export default async function ApplicationDetailsPage(props: Props) {
                 <div className="space-y-2">
                   {application.parsedResume && application.parsedResume.analyzedAt && (
                     <div className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                       <span className="text-sm text-muted-foreground">Resume Analyzed:</span>
                       <span className="text-sm">
                         {formatDate(application.parsedResume.analyzedAt)}
@@ -123,7 +123,7 @@ export default async function ApplicationDetailsPage(props: Props) {
                   <div className="flex items-center gap-2">
                     {hasInterviewState ? (
                       <>
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                         <span className="text-sm text-muted-foreground">Interview Status:</span>
                         <span className="text-sm">
                           {application.interviewState?.completed ? 'Completed' : 'Started'}
@@ -151,12 +151,12 @@ export default async function ApplicationDetailsPage(props: Props) {
                   application.interviewState?.completedAt) && (
                   <div className="flex items-center gap-2">
                     {application.parsedResume?.analyzedAt && (
-                      <Badge variant="outline" className="bg-blue-500/20 text-blue-500">
+                      <Badge variant="outline" className="bg-info/10 text-info">
                         Resume Analyzed
                       </Badge>
                     )}
                     {application.interviewState?.completedAt && (
-                      <Badge variant="outline" className="bg-green-500/20 text-green-500">
+                      <Badge variant="outline" className="bg-success/10 text-success">
                         Interview Completed
                       </Badge>
                     )}
@@ -179,10 +179,10 @@ export default async function ApplicationDetailsPage(props: Props) {
                             <Badge
                               className={`${
                                 application.parsedResume.matchScore > 70
-                                  ? 'bg-green-500/20 text-green-500'
+                                  ? 'bg-success/10 text-success'
                                   : application.parsedResume.matchScore > 50
-                                    ? 'bg-yellow-500/20 text-yellow-500'
-                                    : 'bg-red-500/20 text-red-500'
+                                    ? 'bg-warning/10 text-warning'
+                                    : 'bg-destructive/10 text-destructive'
                               }`}
                             >
                               {application.parsedResume.matchScore}%
@@ -235,7 +235,7 @@ export default async function ApplicationDetailsPage(props: Props) {
                                   <Badge
                                     key={index}
                                     variant="outline"
-                                    className="bg-red-500/10 text-red-400 border-red-400/30"
+                                    className="bg-destructive/10 text-destructive border-destructive/30"
                                   >
                                     {skill}
                                   </Badge>

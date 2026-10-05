@@ -9,6 +9,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-space-grotesk);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -26,6 +27,9 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -34,6 +38,10 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-cyan: var(--brand-cyan);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -44,109 +52,415 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/*
+ * Hirelytics design tokens — derived from the brand logo (public/images/hirelytics-logo.svg):
+ * deep ocean blue #0C4A6E (logo ground) and sky blue #38BDF8 (logo mark).
+ * Light mode anchors on the logo's deep blue; dark mode inverts the relationship,
+ * lighting deep ocean surfaces with the sky-blue mark. Color is reserved for
+ * meaning (primary action, success, warning, destructive) — not decoration.
+ */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.705 0.015 286.067);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.21 0.006 285.885);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.705 0.015 286.067);
+  --radius: 0.5rem;
+  --background: #f8fafb;
+  --foreground: #0e2433;
+  --card: #ffffff;
+  --card-foreground: #0e2433;
+  --popover: #ffffff;
+  --popover-foreground: #0e2433;
+  --primary: #0c4a6e;
+  --primary-foreground: #f8fafb;
+  --primary-hover: #0a5c86;
+  --brand-deep: #0c4a6e;
+  --brand-blue: #1e40af;
+  --brand-cyan: #38bdf8;
+  --secondary: #edf3f7;
+  --secondary-foreground: #0e2433;
+  --muted: #eef3f6;
+  --muted-foreground: #52708a;
+  --accent: #e1f0f9;
+  --accent-foreground: #0c4a6e;
+  --destructive: oklch(0.55 0.19 27);
+  --destructive-foreground: #f8fafb;
+  --success: oklch(0.53 0.115 155);
+  --success-foreground: #f8fafb;
+  --warning: oklch(0.64 0.125 70);
+  --warning-foreground: oklch(0.2 0.03 70);
+  --info: #0369a1;
+  --info-foreground: #f8fafb;
+  --border: #e3ebf1;
+  --input: #e3ebf1;
+  --ring: #38bdf8;
+  --chart-1: #0c4a6e;
+  --chart-2: #38bdf8;
+  --chart-3: #f59e0b;
+  --chart-4: #10b981;
+  --chart-5: #8b5cf6;
+  --sidebar: #f2f7fa;
+  --sidebar-foreground: #0e2433;
+  --sidebar-primary: #0c4a6e;
+  --sidebar-primary-foreground: #f8fafb;
+  --sidebar-accent: #e1f0f9;
+  --sidebar-accent-foreground: #0c4a6e;
+  --sidebar-border: #e3ebf1;
+  --sidebar-ring: #38bdf8;
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --background: #0a1621;
+  --foreground: #e8f1f7;
+  --card: #101f2c;
+  --card-foreground: #e8f1f7;
+  --popover: #122331;
+  --popover-foreground: #e8f1f7;
+  --primary: #38bdf8;
+  --primary-foreground: #07202f;
+  --primary-hover: #7dd3fc;
+  --brand-deep: #0c4a6e;
+  --brand-blue: #1e40af;
+  --brand-cyan: #38bdf8;
+  --secondary: #182b3a;
+  --secondary-foreground: #e8f1f7;
+  --muted: #142533;
+  --muted-foreground: #8fa9bc;
+  --accent: #15303f;
+  --accent-foreground: #dff3fc;
+  --destructive: oklch(0.65 0.175 25);
+  --destructive-foreground: oklch(0.17 0.02 220);
+  --success: oklch(0.71 0.125 158);
+  --success-foreground: oklch(0.17 0.02 220);
+  --warning: oklch(0.78 0.125 75);
+  --warning-foreground: oklch(0.2 0.03 70);
+  --info: #7dd3fc;
+  --info-foreground: #07202f;
+  --border: oklch(1 0 0 / 11%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 285.938);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --ring: #38bdf8;
+  --chart-1: #38bdf8;
+  --chart-2: #60a5fa;
+  --chart-3: #fbbf24;
+  --chart-4: #34d399;
+  --chart-5: #a78bfa;
+  --sidebar: #0c1b27;
+  --sidebar-foreground: #e8f1f7;
+  --sidebar-primary: #38bdf8;
+  --sidebar-primary-foreground: #07202f;
+  --sidebar-accent: #15293a;
+  --sidebar-accent-foreground: #e8f1f7;
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.552 0.016 285.938);
+  --sidebar-ring: #38bdf8;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 22%, transparent);
   }
 }
 
-/* Custom animations */
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+/* Numeric alignment for stats, tables and timers */
+.numeric {
+  font-variant-numeric: tabular-nums;
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
+/*
+ * Rating-scale ticks for rubric indicators: five segments separated by
+ * surface-colored rules, reading like an assessment scorecard scale.
+ */
+.score-ticks {
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(20% - 1px),
+    var(--card) calc(20% - 1px),
+    var(--card) 20%
+  );
+}
+
+/*
+ * Motion system — one shared language (see .stitch/DESIGN.md).
+ * Fast for micro-feedback, normal for component states, slow for entrances.
+ */
+:root {
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Grouped entrance: content rises in as a block, not element by element */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  50% {
+  to {
     opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
+    transform: translateY(0);
   }
 }
 
+.rise-in {
+  animation: rise-in var(--duration-slow) var(--ease-enter) both;
+}
+.rise-in-d1 {
+  animation-delay: 90ms;
+}
+.rise-in-d2 {
+  animation-delay: 180ms;
+}
+.rise-in-d3 {
+  animation-delay: 270ms;
+}
+
+/* Success check: ring draws, then the check stroke */
+@keyframes stroke-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.ring-draw {
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  animation: stroke-draw 700ms var(--ease-enter) both;
+}
+.check-draw {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: stroke-draw 500ms var(--ease-enter) 300ms forwards;
+}
+
+/* Restrained ambient lighting for brand surfaces; transform/opacity only */
+@keyframes ambient-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(3%, -4%, 0) scale(1.08);
+    opacity: 0.8;
+  }
+}
+.ambient-glow {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--primary) 9%, transparent),
+    transparent 70%
+  );
+  animation: ambient-drift 26s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Smooth transformation between light and dark (class applied by the theme toggle) */
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition:
+    background-color 300ms var(--ease-standard),
+    border-color 300ms var(--ease-standard),
+    color 200ms var(--ease-standard),
+    fill 300ms var(--ease-standard),
+    stroke 300ms var(--ease-standard) !important;
+}
+
+/* Dark mode depth: a quiet brand-sky light source above the page */
+.dark body {
+  background-image: radial-gradient(
+    1100px 620px at 50% -180px,
+    color-mix(in oklab, var(--primary) 9%, transparent),
+    transparent 70%
+  );
+}
+
+/* Hero headline: words rise in with a blur-to-sharp settle */
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+.hero-word {
+  display: inline-block;
+  animation: word-in 600ms var(--ease-enter) both;
+}
+
+/* Rubric scales fill from the left, like an assessment being scored */
+@keyframes bar-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.bar-fill {
+  transform-origin: left;
+  animation: bar-fill 900ms var(--ease-enter) 600ms both;
+}
+
+/* Elements that land after the data (verdict chip) */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.pop-in {
+  animation: pop-in 400ms var(--ease-enter) 1200ms both;
+}
+
+/* Brand "scan" ring, from the logo's dashed orbit */
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.orbit-ring {
+  animation: orbit-spin 48s linear infinite;
+}
+
+/* Pointer spotlight on brand hero surfaces (desktop pointers only) */
+.spotlight {
+  position: relative;
+}
+.spotlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms var(--ease-standard);
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--brand-cyan) 12%, transparent),
+    transparent 65%
+  );
+}
+.spotlight:hover::after {
+  opacity: 1;
+}
+@media (pointer: coarse) {
+  .spotlight::after {
+    display: none;
+  }
+}
+
+/*
+ * Brand environment panel: a deep-blue → blue field (the logo's ground) with
+ * the dashed orbit and a cyan light source as ::before/::after layers.
+ * isolation keeps the negative-z decorations above the panel background
+ * but below its content.
+ */
+.brand-panel {
+  position: relative;
+  isolation: isolate;
+}
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  top: -3rem;
+  right: -3rem;
+  z-index: -1;
+  height: 14rem;
+  width: 14rem;
+  border-radius: 9999px;
+  border: 2px dashed color-mix(in oklab, #ffffff 20%, transparent);
+  pointer-events: none;
+}
+.brand-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -4rem;
+  left: -3rem;
+  z-index: -1;
+  height: 16rem;
+  width: 16rem;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--brand-cyan) 16%, transparent),
+    transparent 70%
+  );
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+/* Respect users who opt out of motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-subtle-bounce,
+  .animate-gradient,
+  .voice-wave,
+  .animate-in,
+  .animate-pulse,
+  .rise-in,
+  .ambient-glow,
+  .hero-word,
+  .bar-fill,
+  .pop-in,
+  .orbit-ring {
+    animation: none;
+    transition-duration: 0.01ms;
+  }
+  .theme-transitioning *,
+  .theme-transitioning *::before,
+  .theme-transitioning *::after {
+    transition: none !important;
+  }
+  .ring-draw,
+  .check-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Subtle dot grid used behind auth and hero surfaces */
+.bg-dots {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--foreground) 7%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* Dotted grid that fades out toward the edges */
+.bg-dots-fade {
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
+}
+
+/* Gradient step used by the interview speech input meter */
 @keyframes gradientMove {
   0% {
     background-position: 0% 50%;
@@ -159,35 +473,12 @@
   }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-pulse-slow {
-  animation: pulse 4s ease-in-out infinite;
-}
-
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradientMove 15s ease infinite;
 }
 
-/* Auth Card Gradient */
-.auth-card-gradient {
-  background-size: 200% 200%;
-  z-index: -1;
-}
-
-/* Z-index classes */
-.z-index-0 {
-  z-index: 0;
-}
-
-.z-index-minus-1 {
-  z-index: -1;
-}
-
-/* Animation for voice waves */
+/* Voice wave meter (live interview) */
 @keyframes voiceWave {
   0%,
   100% {
@@ -246,7 +537,7 @@
   }
 }
 
-/* Subtle bounce animation for "Your turn" status */
+/* Restrained attention motion for "Your turn" status */
 @keyframes subtleBounce {
   0%,
   20%,

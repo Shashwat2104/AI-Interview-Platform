@@ -1,11 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { LaptopIcon, MoonIcon, SunIcon } from 'lucide-react';
+import { Check, Laptop, Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import * as React from 'react';
 
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,71 +17,44 @@ export function ThemeToggle() {
   const { setTheme, theme } = useTheme();
   const t = useTranslations('Common.theme');
 
+  /**
+   * Theme changes transform the interface between two visual worlds:
+   * a brief transitioning class lets surfaces interpolate smoothly.
+   */
+  const changeTheme = (value: 'light' | 'dark' | 'system') => {
+    const root = document.documentElement;
+    root.classList.add('theme-transitioning');
+    setTheme(value);
+    window.setTimeout(() => root.classList.remove('theme-transitioning'), 400);
+  };
+
+  const options = [
+    { value: 'light', label: t('light'), icon: Sun },
+    { value: 'dark', label: t('dark'), icon: Moon },
+    { value: 'system', label: t('system'), icon: Laptop },
+  ] as const;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="relative h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 text-primary"
-        >
-          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+          <Sun className="h-[1.1rem] w-[1.1rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+          <Moon className="absolute h-[1.1rem] w-[1.1rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
-        </motion.button>
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className="animate-in fade-in-50 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
-      >
-        <DropdownMenuItem
-          onClick={() => setTheme('light')}
-          className={`flex items-center gap-2 cursor-pointer ${
-            theme === 'light' ? 'bg-accent text-accent-foreground font-medium' : ''
-          }`}
-        >
-          <SunIcon className="h-4 w-4" />
-          <span>{t('light')}</span>
-          {theme === 'light' && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="ml-auto h-1.5 w-1.5 rounded-full bg-primary"
-            />
-          )}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme('dark')}
-          className={`flex items-center gap-2 cursor-pointer ${
-            theme === 'dark' ? 'bg-accent text-accent-foreground font-medium' : ''
-          }`}
-        >
-          <MoonIcon className="h-4 w-4" />
-          <span>{t('dark')}</span>
-          {theme === 'dark' && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="ml-auto h-1.5 w-1.5 rounded-full bg-primary"
-            />
-          )}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme('system')}
-          className={`flex items-center gap-2 cursor-pointer ${
-            theme === 'system' ? 'bg-accent text-accent-foreground font-medium' : ''
-          }`}
-        >
-          <LaptopIcon className="h-4 w-4" />
-          <span>{t('system')}</span>
-          {theme === 'system' && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="ml-auto h-1.5 w-1.5 rounded-full bg-primary"
-            />
-          )}
-        </DropdownMenuItem>
+      <DropdownMenuContent align="end" className="min-w-32">
+        {options.map(({ value, label, icon: Icon }) => (
+          <DropdownMenuItem
+            key={value}
+            onClick={() => changeTheme(value)}
+            className="cursor-pointer"
+          >
+            <Icon className="h-4 w-4" />
+            <span>{label}</span>
+            {theme === value && <Check className="ml-auto h-4 w-4" />}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

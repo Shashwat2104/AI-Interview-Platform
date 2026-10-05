@@ -53,3 +53,5 @@ next-env.d.ts
 .freebuff
 test & logs
 scripts
+.stitch
+start.log

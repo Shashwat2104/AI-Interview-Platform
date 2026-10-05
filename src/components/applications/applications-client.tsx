@@ -3,10 +3,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { BarChart2, CheckCircle, Eye } from 'lucide-react';
+import { BarChart2, Briefcase, CheckCircle, Eye } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
+import { EmptyState } from '@/components/shared/empty-state';
+import { StatusBadge } from '@/components/shared/status-badge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -47,6 +51,7 @@ export interface JobDetails {
 
 export function ApplicationsClient() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<ApplicationStatus | 'all'>('all');
 
   // Fetch all applications for the current user
@@ -145,26 +150,7 @@ export function ApplicationsClient() {
       header: 'Status',
       cell: ({ row }) => {
         const status = row.getValue('status') as ApplicationStatus;
-        let variant: 'default' | 'outline' | 'secondary' | 'destructive' = 'outline';
-
-        switch (status) {
-          case 'accepted':
-            variant = 'default'; // Success color
-            break;
-          case 'rejected':
-            variant = 'destructive'; // Error color
-            break;
-          case 'reviewed':
-            variant = 'secondary'; // Neutral color
-            break;
-          case 'pending':
-            variant = 'outline'; // Default outline
-            break;
-          default:
-            variant = 'outline';
-        }
-
-        return <Badge variant={variant}>{status}</Badge>;
+        return <StatusBadge status={status} />;
       },
     },
     {
@@ -180,43 +166,25 @@ export function ApplicationsClient() {
         const matchScore = application.parsedResume?.matchScore;
 
         if (matchScore === undefined)
-          return <span className="text-muted-foreground text-sm">Not analyzed</span>;
-
-        let badgeColor = '';
-        let statusIcon = '';
-
-        if (matchScore >= 70) {
-          badgeColor = 'bg-green-100 text-green-800 border-green-300';
-          statusIcon = '✓';
-        } else if (matchScore >= 50) {
-          badgeColor = 'bg-amber-100 text-amber-800 border-amber-300';
-          statusIcon = '◐';
-        } else {
-          badgeColor = 'bg-red-100 text-red-800 border-red-300';
-          statusIcon = '✗';
-        }
+          return <span className="text-sm text-muted-foreground">Not analyzed</span>;
 
         return (
           <div className="flex items-center gap-2">
-            <div className="w-[52px] flex-shrink-0">
-              <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+            <div className="w-[52px] shrink-0">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
                 <div
                   className={`h-full rounded-full ${
                     matchScore >= 70
-                      ? 'bg-green-500'
+                      ? 'bg-success'
                       : matchScore >= 50
-                        ? 'bg-amber-500'
-                        : 'bg-red-500'
+                        ? 'bg-warning'
+                        : 'bg-destructive'
                   }`}
                   style={{ width: `${matchScore}%` }}
                 />
               </div>
             </div>
-            <span
-              className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium border ${badgeColor}`}
-            >
-              {statusIcon} {matchScore}%
-            </span>
+            <span className="numeric text-sm font-medium">{matchScore}%</span>
           </div>
         );
       },
@@ -238,7 +206,7 @@ export function ApplicationsClient() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => window.open(`/dashboard/jobs/${application.job.urlId}`, '_blank')}
+              onClick={() => router.push(`/dashboard/jobs/${application.job.urlId}`)}
             >
               <Eye className="h-4 w-4 mr-1" />
               View Job
@@ -246,16 +214,7 @@ export function ApplicationsClient() {
             <Button
               variant={application.parsedResume?.matchScore !== undefined ? 'outline' : 'secondary'}
               size="sm"
-              onClick={() => window.open(`/dashboard/applications/${application._id}`, '_blank')}
-              className={
-                application.parsedResume?.matchScore !== undefined
-                  ? application.parsedResume.matchScore >= 70
-                    ? 'text-green-600 hover:text-green-700'
-                    : application.parsedResume.matchScore >= 50
-                      ? 'text-amber-600 hover:text-amber-700'
-                      : 'text-red-600 hover:text-red-700'
-                  : ''
-              }
+              onClick={() => router.push(`/dashboard/applications/${application._id}`)}
             >
               {application.parsedResume?.matchScore !== undefined ? (
                 <>
@@ -335,56 +294,60 @@ export function ApplicationsClient() {
         <TabsContent value="all" className="p-4">
           <DataTable columns={columns} data={filteredApplications} isLoading={isLoading} />
           {!isLoading && filteredApplications.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <p className="text-muted-foreground mb-4">
-                You haven&apos;t applied to any jobs yet.
-              </p>
-              <Button onClick={() => (window.location.href = '/dashboard/jobs')}>
-                Browse Available Jobs
-              </Button>
-            </div>
+            <EmptyState
+              icon={Briefcase}
+              title="No applications yet"
+              description="Browse open positions and apply with your resume to start tracking your progress here."
+              action={
+                <Button asChild size="sm">
+                  <Link href="/dashboard/jobs">Browse jobs</Link>
+                </Button>
+              }
+            />
           )}
         </TabsContent>
 
         <TabsContent value="pending" className="p-4">
           <DataTable columns={columns} data={filteredApplications} isLoading={isLoading} />
           {!isLoading && filteredApplications.length === 0 && (
-            <div className="py-8 text-center">
-              <p className="text-muted-foreground">You don&apos;t have any pending applications.</p>
-            </div>
+            <EmptyState
+              icon={Briefcase}
+              title="No pending applications"
+              description="Applications waiting for a recruiter review will appear here."
+            />
           )}
         </TabsContent>
 
         <TabsContent value="reviewed" className="p-4">
           <DataTable columns={columns} data={filteredApplications} isLoading={isLoading} />
           {!isLoading && filteredApplications.length === 0 && (
-            <div className="py-8 text-center">
-              <p className="text-muted-foreground">
-                You don&apos;t have any reviewed applications.
-              </p>
-            </div>
+            <EmptyState
+              icon={Briefcase}
+              title="No reviewed applications"
+              description="Once a recruiter reviews one of your applications, it will show up here."
+            />
           )}
         </TabsContent>
 
         <TabsContent value="accepted" className="p-4">
           <DataTable columns={columns} data={filteredApplications} isLoading={isLoading} />
           {!isLoading && filteredApplications.length === 0 && (
-            <div className="py-8 text-center">
-              <p className="text-muted-foreground">
-                You don&apos;t have any accepted applications.
-              </p>
-            </div>
+            <EmptyState
+              icon={Briefcase}
+              title="No accepted applications"
+              description="Applications that move forward in the hiring process will appear here."
+            />
           )}
         </TabsContent>
 
         <TabsContent value="rejected" className="p-4">
           <DataTable columns={columns} data={filteredApplications} isLoading={isLoading} />
           {!isLoading && filteredApplications.length === 0 && (
-            <div className="py-8 text-center">
-              <p className="text-muted-foreground">
-                You don&apos;t have any rejected applications.
-              </p>
-            </div>
+            <EmptyState
+              icon={Briefcase}
+              title="No rejected applications"
+              description="Applications that were not selected will appear here."
+            />
           )}
         </TabsContent>
       </Tabs>

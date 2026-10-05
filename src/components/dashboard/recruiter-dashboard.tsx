@@ -2,15 +2,21 @@
 'use client';
 
 import { format } from 'date-fns';
-import { BriefcaseIcon, FileText, Users } from 'lucide-react';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { ActivityFeed } from '@/components/dashboard/activity-feed';
-import { ClickableStatCard } from '@/components/dashboard/clickable-stat-card';
+import { DashboardSkeleton } from '@/components/dashboard/dashboard-skeleton';
 import { PieChartCard } from '@/components/dashboard/pie-chart-card';
+import { ErrorState } from '@/components/shared/error-state';
+import { PageHeader } from '@/components/shared/page-header';
+import { StatCard } from '@/components/shared/stat-card';
+import { statusColorVar } from '@/components/shared/status-badge';
+import { Button } from '@/components/ui/button';
 import { useDashboardStats } from '@/hooks/use-dashboard-stats';
 
-interface ApplicationStatusData {
+interface ChartDatum {
   name: string;
   value: number;
   color: string;
@@ -18,115 +24,104 @@ interface ApplicationStatusData {
 
 interface ApplicationActivity {
   title: string;
-  description: string;
+  description?: string;
   timestamp: string;
-  status: string;
+  status?: string;
 }
 
 export function RecruiterDashboard() {
-  const { stats, loading, error } = useDashboardStats();
-  const [applicationsByStatusData, setApplicationsByStatusData] = useState<ApplicationStatusData[]>(
-    []
-  );
-  const [recentApplicationsList, setRecentApplicationsList] = useState<ApplicationActivity[]>([]);
-
-  // Define colors for pie chart
-  const statusColors = {
-    pending: '#fbbf24',
-    reviewed: '#3b82f6',
-    accepted: '#10b981',
-    rejected: '#ef4444',
-  };
+  const { stats, loading, error, refetch } = useDashboardStats();
+  const [statusData, setStatusData] = useState<ChartDatum[]>([]);
+  const [recentApplications, setRecentApplications] = useState<ApplicationActivity[]>([]);
 
   useEffect(() => {
-    if (stats) {
-      // Format application status data for pie chart
-      if (stats.applicationsByStatus) {
-        setApplicationsByStatusData(
-          stats.applicationsByStatus.map((item: any) => ({
-            name: item._id,
-            value: item.count,
-            color: statusColors[item._id as keyof typeof statusColors] || '#94a3b8',
-          }))
-        );
-      }
+    if (!stats) return;
 
-      // Format recent applications for activity feed
-      if (stats.recentApplications) {
-        setRecentApplicationsList(
-          stats.recentApplications.map((app: any) => ({
-            title: app.jobInfo?.title || 'Unknown Job',
-            description: `Applied by ${app.candidateName || 'Unknown'}`,
-            timestamp: format(new Date(app.createdAt), 'MMM dd, yyyy'),
-            status: app.status,
-          }))
-        );
-        console.log('Recruiter - Recent applications:', stats.recentApplications);
-      }
+    if (stats.applicationsByStatus) {
+      setStatusData(
+        stats.applicationsByStatus.map((item: any) => ({
+          name: item._id,
+          value: item.count,
+          color: statusColorVar(item._id),
+        }))
+      );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    if (stats.recentApplications) {
+      setRecentApplications(
+        stats.recentApplications.map((app: any) => ({
+          title: app.jobInfo?.title || 'Unknown job',
+          description: `Applied by ${app.candidateName || 'unknown candidate'}`,
+          timestamp: format(new Date(app.createdAt), 'MMM d, yyyy'),
+          status: app.status,
+        }))
+      );
+    }
   }, [stats]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
-      </div>
-    );
+    return <DashboardSkeleton tiles={3} />;
   }
 
   if (error) {
     return (
-      <div className="bg-destructive/10 p-4 rounded-md text-destructive">
-        Error loading dashboard data: {error}
-      </div>
+      <ErrorState
+        title="Unable to load your dashboard"
+        description="We couldn't retrieve your hiring data. Check your connection and try again."
+        onRetry={refetch}
+        className="min-h-[400px]"
+      />
     );
   }
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Recruiter Dashboard</h1>
+    <div className="space-y-6">
+      <PageHeader
+        title="Recruiter dashboard"
+        description="Your job listings and candidate activity at a glance."
+        actions={
+          <Button asChild size="sm">
+            <Link href="/dashboard/job-listing">
+              <Plus className="size-4" />
+              Post a job
+            </Link>
+          </Button>
+        }
+      />
 
-      {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <ClickableStatCard
-          title="My Jobs"
-          value={stats?.myJobs || 0}
-          description="Active job listings you've posted"
-          icon={<BriefcaseIcon className="h-4 w-4" />}
+      <div className="rise-in grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <StatCard
+          label="My jobs"
+          value={stats?.myJobs ?? 0}
+          hint="Listings you've posted"
           href="/dashboard/job-listing"
         />
-        <ClickableStatCard
-          title="Total Applications"
-          value={stats?.totalApplications || 0}
-          description="Applications to your job listings"
-          icon={<FileText className="h-4 w-4" />}
+        <StatCard
+          label="Total applications"
+          value={stats?.totalApplications ?? 0}
+          hint="Applications to your listings"
           href="/dashboard/job-applications"
         />
-        <ClickableStatCard
-          title="Acceptance Rate"
+        <StatCard
+          label="Acceptance rate"
           value={`${calculateAcceptanceRate(stats?.applicationsByStatus || [])}%`}
-          description="Percentage of applications accepted"
-          icon={<Users className="h-4 w-4" />}
+          hint="Share of applications accepted"
         />
       </div>
 
-      {/* Charts */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="rise-in rise-in-d1 grid gap-4 lg:grid-cols-2">
         <PieChartCard
-          title="Applications by Status"
+          title="Applications by status"
           description="Distribution of applications to your job listings"
-          data={applicationsByStatusData}
+          data={statusData}
+        />
+        <ActivityFeed
+          title="Recent applications"
+          description="Latest candidates applying to your jobs"
+          items={recentApplications}
+          emptyMessage="No applications yet. They will appear here once candidates start applying."
         />
       </div>
-
-      {/* Recent Activity */}
-      <ActivityFeed
-        title="Recent Applications"
-        description="Latest applications to your job listings"
-        items={recentApplicationsList}
-        emptyMessage="No recent applications"
-      />
     </div>
   );
 }

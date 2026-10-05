@@ -2,142 +2,146 @@
 'use client';
 
 import { format } from 'date-fns';
-import { BriefcaseIcon, Clock, FileCheck } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { ActivityFeed } from '@/components/dashboard/activity-feed';
-import { ClickableStatCard } from '@/components/dashboard/clickable-stat-card';
+import { DashboardSkeleton } from '@/components/dashboard/dashboard-skeleton';
 import { PieChartCard } from '@/components/dashboard/pie-chart-card';
+import { ErrorState } from '@/components/shared/error-state';
+import { PageHeader } from '@/components/shared/page-header';
+import { StatCard } from '@/components/shared/stat-card';
+import { statusColorVar } from '@/components/shared/status-badge';
+import { Button } from '@/components/ui/button';
 import { useDashboardStats } from '@/hooks/use-dashboard-stats';
 
-export function CandidateDashboard() {
-  const { stats, loading, error } = useDashboardStats();
-  const [applicationsByStatusData, setApplicationsByStatusData] = useState<any[]>([]);
-  const [recentApplicationsList, setRecentApplicationsList] = useState<any[]>([]);
-  const [recentJobs, setRecentJobs] = useState<any[]>([]);
+interface ChartDatum {
+  name: string;
+  value: number;
+  color: string;
+}
 
-  // Define colors for pie chart
-  const statusColors = {
-    pending: '#fbbf24',
-    reviewed: '#3b82f6',
-    accepted: '#10b981',
-    rejected: '#ef4444',
-  };
+interface ApplicationActivity {
+  title: string;
+  description?: string;
+  timestamp: string;
+  status?: string;
+}
+
+export function CandidateDashboard() {
+  const { stats, loading, error, refetch } = useDashboardStats();
+  const [statusData, setStatusData] = useState<ChartDatum[]>([]);
+  const [recentApplications, setRecentApplications] = useState<ApplicationActivity[]>([]);
+  const [recentJobs, setRecentJobs] = useState<ApplicationActivity[]>([]);
 
   useEffect(() => {
-    if (stats) {
-      // Format application status data for pie chart
-      if (stats.myApplicationsByStatus) {
-        setApplicationsByStatusData(
-          stats.myApplicationsByStatus.map((item: any) => ({
-            name: item._id,
-            value: item.count,
-            color: statusColors[item._id as keyof typeof statusColors] || '#94a3b8',
-          }))
-        );
-      }
+    if (!stats) return;
 
-      // Format recent applications for activity feed
-      if (stats.myRecentApplications) {
-        setRecentApplicationsList(
-          stats.myRecentApplications.map((app: any) => ({
-            title: app.jobInfo?.title || 'Unknown Job',
-            description: `at ${app.jobInfo?.companyName || 'Unknown Company'}`,
-            timestamp: format(new Date(app.createdAt), 'MMM dd, yyyy'),
-            status: app.status,
-          }))
-        );
-      }
-
-      // Format recent jobs for jobs feed
-      if (stats.recentJobs) {
-        setRecentJobs(
-          stats.recentJobs.map((job: any) => ({
-            title: job.title,
-            description: `${job.companyName} - ${job.location}`,
-            timestamp: format(new Date(job.createdAt), 'MMM dd, yyyy'),
-          }))
-        );
-      }
+    if (stats.myApplicationsByStatus) {
+      setStatusData(
+        stats.myApplicationsByStatus.map((item: any) => ({
+          name: item._id,
+          value: item.count,
+          color: statusColorVar(item._id),
+        }))
+      );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    if (stats.myRecentApplications) {
+      setRecentApplications(
+        stats.myRecentApplications.map((app: any) => ({
+          title: app.jobInfo?.title || 'Unknown job',
+          description: `at ${app.jobInfo?.companyName || 'unknown company'}`,
+          timestamp: format(new Date(app.createdAt), 'MMM d, yyyy'),
+          status: app.status,
+        }))
+      );
+    }
+
+    if (stats.recentJobs) {
+      setRecentJobs(
+        stats.recentJobs.map((job: any) => ({
+          title: job.title,
+          description: `${job.companyName} — ${job.location}`,
+          timestamp: format(new Date(job.createdAt), 'MMM d, yyyy'),
+        }))
+      );
+    }
   }, [stats]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
-      </div>
-    );
+    return <DashboardSkeleton tiles={3} />;
   }
 
   if (error) {
     return (
-      <div className="bg-destructive/10 p-4 rounded-md text-destructive">
-        Error loading dashboard data: {error}
-      </div>
+      <ErrorState
+        title="Unable to load your dashboard"
+        description="We couldn't retrieve your application data. Check your connection and try again."
+        onRetry={refetch}
+        className="min-h-[400px]"
+      />
     );
   }
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Candidate Dashboard</h1>
+    <div className="space-y-6">
+      <PageHeader
+        title="Candidate dashboard"
+        description="Track your applications and find your next opportunity."
+      />
 
-      {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <ClickableStatCard
-          title="My Applications"
-          value={stats?.myApplicationsCount || 0}
-          description="Total jobs you've applied to"
-          icon={<FileCheck className="h-4 w-4" />}
+      <div className="rise-in grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <StatCard
+          label="My applications"
+          value={stats?.myApplicationsCount ?? 0}
+          hint="Jobs you've applied to"
           href="/dashboard/applications"
         />
-        <ClickableStatCard
-          title="Application Success Rate"
+        <StatCard
+          label="Success rate"
           value={`${calculateSuccessRate(stats?.myApplicationsByStatus || [])}%`}
-          description="Percentage of successful applications"
-          icon={<BriefcaseIcon className="h-4 w-4" />}
+          hint="Applications accepted"
         />
-        <ClickableStatCard
-          title="Interview Opportunities"
+        <StatCard
+          label="In review or accepted"
           value={countInterviewOpportunities(stats?.myApplicationsByStatus || [])}
-          description="Applications in review or accepted status"
-          icon={<Clock className="h-4 w-4" />}
+          hint="Applications moving forward"
         />
       </div>
 
-      {/* Browse Jobs Section */}
-      <div className="grid gap-4 md:grid-cols-1">
-        <ClickableStatCard
-          title="Browse Available Jobs"
-          value="Explore Opportunities"
-          description="Find and apply to new job openings"
-          icon={<BriefcaseIcon className="h-4 w-4" />}
-          href="/dashboard/jobs"
-        />
+      <div className="rise-in rise-in-d1 flex flex-col items-start justify-between gap-3 rounded-lg border bg-muted/40 p-5 sm:flex-row sm:items-center">
+        <div>
+          <p className="text-sm font-medium">Looking for your next role?</p>
+          <p className="text-sm text-muted-foreground">
+            Browse open positions and apply with your resume.
+          </p>
+        </div>
+        <Button asChild size="sm">
+          <Link href="/dashboard/jobs">Browse jobs</Link>
+        </Button>
       </div>
 
-      {/* Charts */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="rise-in rise-in-d1 grid gap-4 lg:grid-cols-2">
         <PieChartCard
-          title="Applications by Status"
-          description="Status distribution of your job applications"
-          data={applicationsByStatusData}
+          title="Applications by status"
+          description="Where your applications currently stand"
+          data={statusData}
         />
-
         <ActivityFeed
-          title="Recent Job Applications"
+          title="Recent applications"
           description="Your most recent job applications"
-          items={recentApplicationsList}
-          emptyMessage="You haven't applied to any jobs yet"
+          items={recentApplications}
+          emptyMessage="You haven't applied to any jobs yet. Browse jobs to get started."
         />
       </div>
 
       <ActivityFeed
-        title="Recent Job Postings"
-        description="Latest job opportunities that match your profile"
+        className="rise-in rise-in-d2"
+        title="Recently posted jobs"
+        description="Latest opportunities from recruiters"
         items={recentJobs}
-        emptyMessage="No recent job postings"
+        emptyMessage="No new job postings right now. Check back soon."
       />
     </div>
   );

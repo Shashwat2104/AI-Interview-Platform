@@ -2,150 +2,138 @@
 'use client';
 
 import { format } from 'date-fns';
-import { Activity, BriefcaseIcon, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { ActivityFeed } from '@/components/dashboard/activity-feed';
-import { ClickableStatCard } from '@/components/dashboard/clickable-stat-card';
+import { DashboardSkeleton } from '@/components/dashboard/dashboard-skeleton';
 import { PieChartCard } from '@/components/dashboard/pie-chart-card';
+import { ErrorState } from '@/components/shared/error-state';
+import { PageHeader } from '@/components/shared/page-header';
+import { StatCard } from '@/components/shared/stat-card';
+import { statusColorVar } from '@/components/shared/status-badge';
 import { useDashboardStats } from '@/hooks/use-dashboard-stats';
 
+interface ChartDatum {
+  name: string;
+  value: number;
+  color: string;
+}
+
+interface JobActivity {
+  title: string;
+  description?: string;
+  timestamp: string;
+}
+
+const recruiterPalette = [
+  'var(--chart-1)',
+  'var(--chart-2)',
+  'var(--chart-3)',
+  'var(--chart-4)',
+  'var(--chart-5)',
+];
+
 export function AdminDashboard() {
-  const { stats, loading, error } = useDashboardStats();
-
-  // Format application status data for pie chart
-  const [applicationStatusData, setApplicationStatusData] = useState<any[]>([]);
-  const [jobsPerRecruiterData, setJobsPerRecruiterData] = useState<any[]>([]);
-  const [recentJobs, setRecentJobs] = useState<any[]>([]);
-
-  // Define colors for pie chart
-  const statusColors = {
-    pending: '#fbbf24',
-    reviewed: '#3b82f6',
-    accepted: '#10b981',
-    rejected: '#ef4444',
-  };
-
-  const recruiterColors = [
-    '#6366f1',
-    '#8b5cf6',
-    '#ec4899',
-    '#14b8a6',
-    '#f59e0b',
-    '#84cc16',
-    '#06b6d4',
-    '#f43f5e',
-  ];
+  const { stats, loading, error, refetch } = useDashboardStats();
+  const [applicationStatusData, setApplicationStatusData] = useState<ChartDatum[]>([]);
+  const [jobsPerRecruiterData, setJobsPerRecruiterData] = useState<ChartDatum[]>([]);
+  const [recentJobs, setRecentJobs] = useState<JobActivity[]>([]);
 
   useEffect(() => {
-    if (stats) {
-      // Format application status data
-      if (stats.applicationStatusData) {
-        setApplicationStatusData(
-          stats.applicationStatusData.map((item: any) => ({
-            name: item._id,
-            value: item.count,
-            color: statusColors[item._id as keyof typeof statusColors] || '#94a3b8',
-          }))
-        );
-      }
+    if (!stats) return;
 
-      // Format jobs per recruiter data
-      if (stats.jobsPerRecruiter) {
-        setJobsPerRecruiterData(
-          stats.jobsPerRecruiter.map((item: any, index: number) => ({
-            name: item._id,
-            value: item.count,
-            color: recruiterColors[index % recruiterColors.length],
-          }))
-        );
-      }
-
-      // Format recent jobs for activity feed
-      if (stats.recentJobs) {
-        setRecentJobs(
-          stats.recentJobs.map((job: any) => ({
-            title: job.title || 'Untitled Job',
-            description: `Added by ${job.recruiter?.name || 'Unknown'}`,
-            timestamp: format(new Date(job.createdAt), 'MMM dd, yyyy'),
-          }))
-        );
-      }
+    if (stats.applicationStatusData) {
+      setApplicationStatusData(
+        stats.applicationStatusData.map((item: any) => ({
+          name: item._id,
+          value: item.count,
+          color: statusColorVar(item._id),
+        }))
+      );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    if (stats.jobsPerRecruiter) {
+      setJobsPerRecruiterData(
+        stats.jobsPerRecruiter.map((item: any, index: number) => ({
+          name: item._id,
+          value: item.count,
+          color: recruiterPalette[index % recruiterPalette.length],
+        }))
+      );
+    }
+
+    if (stats.recentJobs) {
+      setRecentJobs(
+        stats.recentJobs.map((job: any) => ({
+          title: job.title || 'Untitled job',
+          description: `Posted by ${job.recruiter?.name || 'unknown recruiter'}`,
+          timestamp: format(new Date(job.createdAt), 'MMM d, yyyy'),
+        }))
+      );
+    }
   }, [stats]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
-      </div>
-    );
+    return <DashboardSkeleton tiles={3} />;
   }
 
   if (error) {
     return (
-      <div className="bg-destructive/10 p-4 rounded-md text-destructive">
-        Error loading dashboard data: {error}
-      </div>
+      <ErrorState
+        title="Unable to load the dashboard"
+        description="We couldn't retrieve platform statistics. Check your connection and try again."
+        onRetry={refetch}
+        className="min-h-[400px]"
+      />
     );
   }
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+    <div className="space-y-6">
+      <PageHeader
+        title="Admin dashboard"
+        description="Platform-wide activity across jobs, users and applications."
+      />
 
-      {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <ClickableStatCard
-          title="Total Jobs"
-          value={stats?.totalJobs || 0}
-          description="Active job listings"
-          icon={<BriefcaseIcon className="h-4 w-4" />}
-          href="/dashboard/jobs"
+      <div className="rise-in grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <StatCard
+          label="Total jobs"
+          value={stats?.totalJobs ?? 0}
+          hint="Listings on the platform"
+          href="/dashboard/manage-jobs"
         />
-        <ClickableStatCard
-          title="Total Candidates"
-          value={stats?.totalCandidates || 0}
-          description="Registered candidates"
-          icon={<Users className="h-4 w-4" />}
+        <StatCard
+          label="Total candidates"
+          value={stats?.totalCandidates ?? 0}
+          hint="Registered candidates"
           href="/dashboard/candidates"
         />
-        <ClickableStatCard
-          title="Total Recruiters"
-          value={stats?.totalRecruiters || 0}
-          description="Active recruiters"
-          icon={<Activity className="h-4 w-4" />}
+        <StatCard
+          label="Total recruiters"
+          value={stats?.totalRecruiters ?? 0}
+          hint="Recruiter accounts"
           href="/dashboard/recruiters"
-        />
-        <ClickableStatCard
-          title="Wishlist Entries"
-          value="View All"
-          description="People interested in platform"
-          icon={<Users className="h-4 w-4" />}
-          href="/dashboard/wishlist"
         />
       </div>
 
-      {/* Charts */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="rise-in rise-in-d1 grid gap-4 lg:grid-cols-2">
         <PieChartCard
-          title="Applications by Status"
-          description="Distribution of job applications by current status"
+          title="Applications by status"
+          description="Distribution of job applications across the platform"
           data={applicationStatusData}
         />
         <PieChartCard
-          title="Jobs per Recruiter"
-          description="Number of jobs posted by top recruiters"
+          title="Jobs per recruiter"
+          description="Listings posted by the most active recruiters"
           data={jobsPerRecruiterData}
         />
       </div>
 
-      {/* Recent Activity */}
       <ActivityFeed
-        title="Recently Posted Jobs"
+        className="rise-in rise-in-d2"
+        title="Recently posted jobs"
         items={recentJobs}
-        emptyMessage="No jobs have been posted recently"
+        emptyMessage="No jobs have been posted yet."
       />
     </div>
   );

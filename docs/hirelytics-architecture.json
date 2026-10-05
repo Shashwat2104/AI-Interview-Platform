@@ -1,0 +1,443 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Hirelytics Platform Architecture",
+    "quality_profile": "showcase",
+    "output": "docs/hirelytics-architecture.html",
+    "viewBox": [
+      1320,
+      720
+    ],
+    "repository": {
+      "url": "https://github.com/Shashwat2104/AI-Interview-Platform",
+      "provider": "github",
+      "revision": "bc5838b2901c93b5e3eb06fa17b644d0976e2d92"
+    },
+    "views": [
+      {
+        "id": "request-path",
+        "label": "Request path",
+        "focus": [
+          "web_app",
+          "api_routes",
+          "models",
+          "mongodb"
+        ],
+        "note": "From the App Router UI through Next.js API routes and Mongoose models into MongoDB."
+      },
+      {
+        "id": "ai-pipeline",
+        "label": "AI pipeline",
+        "focus": [
+          "api_routes",
+          "gemini",
+          "s3",
+          "deepgram"
+        ],
+        "note": "How interview sessions, resume analysis, and voice are powered end to end."
+      },
+      {
+        "id": "growth-scheduling",
+        "label": "Growth and scheduling",
+        "focus": [
+          "web_app",
+          "calcom",
+          "analytics",
+          "resend"
+        ],
+        "note": "Client-side embeds, scheduling, email, and product analytics."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "web_app",
+      "type": "frontend",
+      "label": "Next.js 15 App Router",
+      "sublabel": "Recruiter / Candidate / Admin UI",
+      "brand": "next-js",
+      "pos": [
+        40,
+        280
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/app/page.tsx",
+          "label": "landing"
+        },
+        {
+          "path": "src/app/dashboard/layout.tsx",
+          "label": "dashboards"
+        }
+      ]
+    },
+    {
+      "id": "auth",
+      "type": "security",
+      "label": "NextAuth v5",
+      "sublabel": "Credentials + JWT sessions",
+      "pos": [
+        360,
+        130
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/auth.ts",
+          "label": "auth config"
+        }
+      ]
+    },
+    {
+      "id": "api_routes",
+      "type": "backend",
+      "label": "Next.js API Routes",
+      "sublabel": "src/app/api handlers",
+      "brand": "next-js",
+      "pos": [
+        360,
+        280
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/app/api/ai/interview/chat/route.ts",
+          "label": "interview chat"
+        },
+        {
+          "path": "src/app/api/applications/[id]/analyze/route.ts",
+          "label": "resume analysis"
+        }
+      ]
+    },
+    {
+      "id": "models",
+      "type": "backend",
+      "label": "Mongoose Models",
+      "sublabel": "User · Job · JobApplication · InterviewState",
+      "pos": [
+        360,
+        430
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/models/job-application.ts",
+          "label": "applications"
+        },
+        {
+          "path": "src/models/interview-state.ts",
+          "label": "interview state"
+        }
+      ]
+    },
+    {
+      "id": "calcom",
+      "type": "external",
+      "label": "Cal.com Embed",
+      "sublabel": "Scheduling (@calcom/embed-react)",
+      "pos": [
+        40,
+        530
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/app/demo/book/page.tsx",
+          "label": "booking page"
+        }
+      ]
+    },
+    {
+      "id": "analytics",
+      "type": "external",
+      "label": "PostHog + Microsoft Clarity",
+      "sublabel": "Product analytics",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/lib/posthog.ts",
+          "label": "server capture"
+        },
+        {
+          "path": "src/lib/microsoft-clarity.ts",
+          "label": "clarity script"
+        }
+      ]
+    },
+    {
+      "id": "gemini",
+      "type": "cloud",
+      "label": "Google Gemini",
+      "sublabel": "Vercel AI SDK (@ai-sdk/google)",
+      "brand": "google-gemini",
+      "pos": [
+        700,
+        130
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/lib/ai-utils.ts",
+          "label": "generateText"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "type": "cloud",
+      "label": "AWS S3",
+      "sublabel": "Resumes · presigned uploads",
+      "pos": [
+        700,
+        280
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/lib/s3-client.ts",
+          "label": "S3 client"
+        },
+        {
+          "path": "src/lib/storage.ts",
+          "label": "presigning"
+        }
+      ]
+    },
+    {
+      "id": "deepgram",
+      "type": "external",
+      "label": "Deepgram TTS",
+      "sublabel": "Interviewer voice (TTS stream)",
+      "pos": [
+        700,
+        430
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/lib/deepgram-tts.ts",
+          "label": "speech synthesis"
+        }
+      ]
+    },
+    {
+      "id": "resend",
+      "type": "external",
+      "label": "Resend",
+      "sublabel": "Status + transactional email",
+      "pos": [
+        700,
+        580
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/lib/email/render.ts",
+          "label": "email rendering"
+        }
+      ]
+    },
+    {
+      "id": "mongodb",
+      "type": "database",
+      "label": "MongoDB",
+      "sublabel": "Platform datastore",
+      "brand": "mongodb",
+      "pos": [
+        1040,
+        280
+      ],
+      "size": [
+        240,
+        84
+      ],
+      "sources": [
+        {
+          "path": "src/lib/mongodb.ts",
+          "label": "connection"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "One Next.js deployable",
+      "wraps": [
+        "web_app",
+        "auth",
+        "api_routes",
+        "models"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Managed + external services",
+      "wraps": [
+        "gemini",
+        "s3",
+        "deepgram",
+        "resend",
+        "mongodb"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "ui-to-api",
+      "from": "web_app",
+      "to": "api_routes",
+      "label": "fetch /api/*",
+      "labelDy": 24
+    },
+    {
+      "id": "ui-to-auth",
+      "from": "web_app",
+      "to": "auth",
+      "label": "signIn('credentials')",
+      "variant": "security"
+    },
+    {
+      "id": "api-to-auth",
+      "from": "api_routes",
+      "to": "auth",
+      "label": "auth() session check",
+      "variant": "security"
+    },
+    {
+      "id": "api-to-models",
+      "from": "api_routes",
+      "to": "models",
+      "label": "queries",
+      "labelDy": 24
+    },
+    {
+      "id": "models-to-mongo",
+      "from": "models",
+      "to": "mongodb",
+      "label": "CRUD",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [
+        [
+          480,
+          700
+        ],
+        [
+          1160,
+          700
+        ]
+      ]
+    },
+    {
+      "id": "api-to-gemini",
+      "from": "api_routes",
+      "to": "gemini",
+      "label": "generation + analysis",
+      "variant": "emphasis",
+      "labelAt": [
+        710,
+        245
+      ]
+    },
+    {
+      "id": "api-to-s3",
+      "from": "api_routes",
+      "to": "s3",
+      "variant": "emphasis"
+    },
+    {
+      "id": "api-to-deepgram",
+      "from": "api_routes",
+      "to": "deepgram",
+      "variant": "dashed"
+    },
+    {
+      "id": "api-to-resend",
+      "from": "api_routes",
+      "to": "resend",
+      "variant": "dashed"
+    },
+    {
+      "id": "ui-to-calcom",
+      "from": "web_app",
+      "to": "calcom",
+      "label": "booking embed",
+      "variant": "dashed",
+      "labelDy": 24
+    },
+    {
+      "id": "ui-to-analytics",
+      "from": "web_app",
+      "to": "analytics",
+      "label": "posthog-js + Clarity",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "One deployable",
+      "items": [
+        "Next.js 15 App Router ships UI and API routes as a single app",
+        "NextAuth v5 credentials provider guards every dashboard role",
+        "Mongoose models live in src/models: User, Job, JobApplication, InterviewState, Contact, Wishlist"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "AI pipeline",
+      "items": [
+        "Google Gemini via Vercel AI SDK drives interviews, resume analysis, and job descriptions",
+        "Resumes land in AWS S3 through presigned uploads",
+        "Deepgram TTS gives the AI interviewer its voice"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Surrounding services",
+      "items": [
+        "Cal.com embed handles scheduling on the booking page",
+        "Resend delivers transactional email",
+        "PostHog (client + server) and Microsoft Clarity capture product analytics"
+      ]
+    }
+  ]
+}

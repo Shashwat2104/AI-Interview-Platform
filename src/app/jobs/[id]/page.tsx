@@ -154,7 +154,7 @@ export default async function JobDetailsPage(props: Props) {
 
           {/* Sidebar */}
           <div>
-            <Card className="mb-6 sticky top-6 bg-background/70 backdrop-blur-sm">
+            <Card className="mb-6 sticky top-6">
               <CardContent className="pt-6">
                 <div className="flex items-center mb-4">
                   <MapPinIcon className="h-4 w-4 mr-2 text-muted-foreground" />

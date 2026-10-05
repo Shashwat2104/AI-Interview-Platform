@@ -136,8 +136,10 @@ export function LoginForm({ role, callbackUrl, demoAccounts }: LoginFormProps) {
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">{t('demoAccounts') || 'Demo Accounts'}</span>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-card px-2 text-muted-foreground">
+                  {t('demoAccounts') || 'Demo Accounts'}
+                </span>
               </div>
             </div>
 
@@ -153,9 +155,7 @@ export function LoginForm({ role, callbackUrl, demoAccounts }: LoginFormProps) {
                 >
                   <div className="flex flex-col items-start">
                     <span className="font-medium">{demo.label}</span>
-                    <span className="text-xs text-muted-foreground font-normal">
-                      {demo.email}
-                    </span>
+                    <span className="text-xs text-muted-foreground font-normal">{demo.email}</span>
                   </div>
                 </Button>
               ))}

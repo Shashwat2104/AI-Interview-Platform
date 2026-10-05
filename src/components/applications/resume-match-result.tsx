@@ -19,7 +19,7 @@ export default function ResumeMatchResult({
   onRefreshRequest,
 }: MatchResultProps) {
   return (
-    <Card className="mb-4 border-none bg-[#1c1c1c] shadow-none">
+    <Card className="mb-4 border-none bg-muted/40 shadow-none">
       <CardHeader className="py-3 px-4 border-b border-border/40">
         <CardTitle className="text-base font-medium flex justify-between items-center">
           <span>Resume-Job Match Analysis</span>
@@ -49,7 +49,7 @@ export default function ResumeMatchResult({
                     {topSkillMatches.map((skill, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-[#1a1a1a] text-[#f1f1f1] border border-[#333]"
+                        className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium bg-secondary text-secondary-foreground"
                       >
                         {skill}
                       </span>
@@ -67,7 +67,7 @@ export default function ResumeMatchResult({
                     {missingSkills.map((skill, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-[#1a1a1a] text-[#f1f1f1] border border-[#333]"
+                        className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium bg-secondary text-secondary-foreground"
                       >
                         {skill}
                       </span>
@@ -167,11 +167,11 @@ export default function ResumeMatchResult({
             {comments && (
               <div className="mt-2 border-t border-border/40 pt-4">
                 <h3 className="text-sm font-semibold mb-2">AI Analysis</h3>
-                <div className="text-sm text-[#f1f1f1]">{comments}</div>
+                <div className="text-sm">{comments}</div>
               </div>
             )}
 
-            <div className="mt-4 w-full bg-[#333] rounded-full h-1">
+            <div className="mt-4 w-full bg-muted rounded-full h-1">
               <div
                 className={`h-1 rounded-full ${
                   score >= 70 ? 'bg-green-500' : score >= 50 ? 'bg-amber-500' : 'bg-red-500'

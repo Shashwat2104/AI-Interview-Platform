@@ -378,17 +378,17 @@ export default function JobApplicationDetailsPage() {
                 )}
 
                 {application.status === 'accepted' && (
-                  <Badge className="bg-green-500/20 text-green-500 text-lg py-2 px-4">
-                    Accepted
-                  </Badge>
+                  <Badge className="bg-success/10 text-success text-lg py-2 px-4">Accepted</Badge>
                 )}
 
                 {application.status === 'rejected' && (
-                  <Badge className="bg-red-500/20 text-red-500 text-lg py-2 px-4">Rejected</Badge>
+                  <Badge className="bg-destructive/10 text-destructive text-lg py-2 px-4">
+                    Rejected
+                  </Badge>
                 )}
 
                 {application.status === 'reviewed' && (
-                  <Badge className="bg-blue-500/20 text-blue-500 text-lg py-2 px-4">Reviewed</Badge>
+                  <Badge className="bg-info/10 text-info text-lg py-2 px-4">Reviewed</Badge>
                 )}
               </div>
             </div>
@@ -436,10 +436,10 @@ export default function JobApplicationDetailsPage() {
                     className={`
                     ${
                       application.parsedResume.matchScore >= 70
-                        ? 'bg-green-500/20 text-green-500'
+                        ? 'bg-success/10 text-success'
                         : application.parsedResume.matchScore >= 50
-                          ? 'bg-yellow-500/20 text-yellow-500'
-                          : 'bg-red-500/20 text-red-500'
+                          ? 'bg-warning/10 text-warning'
+                          : 'bg-destructive/10 text-destructive'
                     }`}
                   >
                     {application.parsedResume.matchScore}%
@@ -458,10 +458,10 @@ export default function JobApplicationDetailsPage() {
                   <div
                     className={`h-full ${
                       application.parsedResume.matchScore >= 70
-                        ? 'bg-green-500'
+                        ? 'bg-success'
                         : application.parsedResume.matchScore >= 50
-                          ? 'bg-yellow-500'
-                          : 'bg-red-500'
+                          ? 'bg-warning'
+                          : 'bg-destructive'
                     }`}
                     style={{ width: `${application.parsedResume.matchScore}%` }}
                   />
@@ -532,7 +532,7 @@ export default function JobApplicationDetailsPage() {
                     {application.parsedResume?.topSkillMatches?.length ? (
                       <div className="flex flex-wrap gap-1">
                         {application.parsedResume.topSkillMatches.map((skill, index) => (
-                          <Badge key={index} variant="outline" className="bg-green-500/10">
+                          <Badge key={index} variant="outline" className="bg-success/10">
                             {skill}
                           </Badge>
                         ))}
@@ -645,7 +645,7 @@ export default function JobApplicationDetailsPage() {
                 {isInterviewComplete ? (
                   <>
                     <div className="flex items-center gap-2 mb-4">
-                      <Badge className="bg-green-500/20 text-green-500">
+                      <Badge className="bg-success/10 text-success">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Interview Completed
                       </Badge>
@@ -1168,12 +1168,12 @@ export default function JobApplicationDetailsPage() {
                   <Badge
                     className={`ml-2 ${
                       application.status === 'accepted'
-                        ? 'bg-green-500/20 text-green-500'
+                        ? 'bg-success/10 text-success'
                         : application.status === 'rejected'
-                          ? 'bg-red-500/20 text-red-500'
+                          ? 'bg-destructive/10 text-destructive'
                           : application.status === 'reviewed'
-                            ? 'bg-blue-500/20 text-blue-500'
-                            : 'bg-yellow-500/20 text-yellow-500'
+                            ? 'bg-info/10 text-info'
+                            : 'bg-warning/10 text-warning'
                     }`}
                   >
                     {application.status.charAt(0).toUpperCase() + application.status.slice(1)}

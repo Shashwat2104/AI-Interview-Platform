@@ -1,7 +1,8 @@
-import { ArrowRightCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowRightCircle } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { SuccessCheck } from '@/components/shared/success-check';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { connectToDatabase } from '@/lib/mongodb';
@@ -27,10 +28,12 @@ export default async function ApplicationSubmittedPage(props: Props) {
 
     return (
       <div className="container mx-auto py-12 max-w-xl">
-        <Card className="p-8 flex flex-col items-center text-center">
-          <CheckCircle2 className="h-24 w-24 text-primary" />
+        <Card className="rise-in flex flex-col items-center p-8 text-center">
+          <SuccessCheck className="h-24 w-24 text-primary" />
 
-          <h1 className="text-3xl font-bold mt-6">Application Submitted!</h1>
+          <h1 className="font-display mt-6 text-3xl font-medium tracking-tight">
+            Application submitted
+          </h1>
 
           <p className="text-lg text-muted-foreground mt-4 max-w-md">
             Your job application has been successfully submitted. The employer will review your

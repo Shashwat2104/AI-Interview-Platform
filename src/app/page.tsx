@@ -1,855 +1,433 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import {
   ArrowRight,
-  Briefcase as BriefcaseIcon,
+  Briefcase,
   Building2,
-  ChevronRight,
   ClipboardCheck,
   FileText,
-  GraduationCap,
   LineChart,
-  Link as LinkIcon,
+  Link2,
   MessageSquareText,
-  Search,
-  Sparkles,
   Upload,
-  User as UserIcon,
-  Users,
-  Zap,
+  User,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
-import { TypeAnimation } from 'react-type-animation';
+import { useTranslations } from 'next-intl';
 
-import { AnimatedBackground } from '@/components/ui/animated-background';
+import { LandingHeader } from '@/components/landing/landing-header';
+import { Reveal } from '@/components/shared/reveal';
+import { SpotlightCard } from '@/components/shared/spotlight-card';
 import { Button } from '@/components/ui/button';
 import { Footer } from '@/components/ui/footer';
-
-// Animation variants
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6 },
-  },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const featureCardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5 },
-  },
-  hover: {
-    y: -5,
-    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-    transition: { duration: 0.3 },
-  },
-};
 
 export default function Home() {
   const t = useTranslations('HomePage');
   const common = useTranslations('Common');
-  const locale = useLocale(); // Add this line to get current locale
 
-  // Define animation sequences based on translations
-  const headingSequence = [
-    t('typingAnimation.aiPowered'),
-    1500,
-    t('typingAnimation.smartRecruitment'),
-    1500,
-    t('typingAnimation.automatedInterviews'),
-    1500,
-    t('typingAnimation.futureHiring'),
-    1500,
+  const features = [
+    {
+      icon: FileText,
+      title: t('featuresSection.smartJobPosting.title'),
+      description: t('featuresSection.smartJobPosting.description'),
+    },
+    {
+      icon: Link2,
+      title: t('featuresSection.uniqueApplicationLinks.title'),
+      description: t('featuresSection.uniqueApplicationLinks.description'),
+    },
+    {
+      icon: Upload,
+      title: t('featuresSection.resumeAnalysis.title'),
+      description: t('featuresSection.resumeAnalysis.description'),
+    },
+    {
+      icon: MessageSquareText,
+      title: t('featuresSection.aiPoweredInterviews.title'),
+      description: t('featuresSection.aiPoweredInterviews.description'),
+    },
+    {
+      icon: ClipboardCheck,
+      title: t('featuresSection.comprehensiveFeedback.title'),
+      description: t('featuresSection.comprehensiveFeedback.description'),
+    },
+    {
+      icon: LineChart,
+      title: t('featuresSection.dataDrivenInsights.title'),
+      description: t('featuresSection.dataDrivenInsights.description'),
+    },
   ];
 
-  const descriptionSequence = [
-    t('typingAnimation.descriptions.transform'),
-    2000,
-    t('typingAnimation.descriptions.datadriven'),
-    2000,
-    t('typingAnimation.descriptions.streamline'),
-    2000,
+  const steps = [
+    {
+      title: t('howItWorks.steps.step1.title'),
+      description: t('howItWorks.steps.step1.description'),
+    },
+    {
+      title: t('howItWorks.steps.step2.title'),
+      description: t('howItWorks.steps.step2.description'),
+    },
+    {
+      title: t('howItWorks.steps.step3.title'),
+      description: t('howItWorks.steps.step3.description'),
+    },
+    {
+      title: t('howItWorks.steps.step4.title'),
+      description: t('howItWorks.steps.step4.description'),
+    },
+    {
+      title: t('howItWorks.steps.step5.title'),
+      description: t('howItWorks.steps.step5.description'),
+    },
+    {
+      title: t('howItWorks.steps.step6.title'),
+      description: t('howItWorks.steps.step6.description'),
+    },
+  ];
+
+  const testimonials = [
+    {
+      quote:
+        'Hirelytics reduced our time-to-hire by 40% and the quality of candidates reaching final rounds is noticeably better.',
+      name: 'Sarah Johnson',
+      role: 'HR Director',
+      company: 'TechCorp',
+    },
+    {
+      quote:
+        'The AI interviews ask relevant, role-specific questions and the structured feedback helps us compare candidates fairly.',
+      name: 'David Rodriguez',
+      role: 'Talent Acquisition Manager',
+      company: 'InnovateX',
+    },
+    {
+      quote:
+        'I was matched with roles that fit my skills, and the interview itself felt like a real conversation rather than a form.',
+      name: 'Michael Chen',
+      role: 'Software Engineer',
+      company: 'Hired via Hirelytics',
+    },
   ];
 
   return (
-    <div className="flex min-h-screen flex-col items-center">
-      {/* Logo */}
-
-      {/* Hero Section */}
-      <AnimatedBackground colorScheme="indigo" patternOpacity={0.2} className="py-5 md:py-5">
-        <div className="absolute inset-0 z-0 opacity-40">
-          <div className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full bg-blue-600/30 dark:bg-blue-500/30 blur-[120px] animate-pulse-slow"></div>
-          <div
-            className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-purple-600/30 dark:bg-purple-500/30 blur-[120px] animate-pulse-slow"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          <div
-            className="absolute top-1/2 right-1/4 h-[300px] w-[300px] rounded-full bg-indigo-600/30 dark:bg-indigo-500/30 blur-[100px] animate-pulse-slow"
-            style={{ animationDelay: '1s' }}
-          ></div>
-          <div
-            className="absolute top-1/3 left-1/4 h-[250px] w-[250px] rounded-full bg-cyan-600/30 dark:bg-cyan-500/30 blur-[90px] animate-pulse-slow"
-            style={{ animationDelay: '3s' }}
-          ></div>
-        </div>
-
-        {/* Animated pattern overlay */}
-        <div className="absolute inset-0 z-0 opacity-10">
-          <div className="h-full w-full bg-[url('/patterns/grid.svg')] bg-repeat opacity-20"></div>
-        </div>
-
-        <div className="absolute right-10 top-20 hidden md:block">
-          <motion.div
-            className="relative h-[300px] w-[300px]"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 via-blue-500/20 to-purple-500/20 animate-float"></div>
-            <div
-              className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/10 via-blue-500/10 to-purple-500/10 animate-float"
-              style={{ animationDelay: '1s' }}
-            ></div>
-            <div
-              className="absolute inset-0 rounded-full border border-primary/20 animate-float"
-              style={{ animationDelay: '2s' }}
-            ></div>
-          </motion.div>
-        </div>
-
-        <motion.div
-          className="container relative z-10 mx-auto flex flex-col items-center justify-center px-4 text-center"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
-          <motion.div
-            className="mb-6 inline-flex items-center gap-2 rounded-full bg-secondary/80 px-4 py-1.5 text-sm font-medium"
-            variants={fadeIn}
-          >
-            <Sparkles size={16} className="text-primary" />
-            {t('hero.aiPoweredRecruitment')}
-          </motion.div>
-          <motion.div variants={fadeIn} className="mb-8">
+    <div className="flex min-h-screen flex-col">
+      <LandingHeader className="rise-in">
+        <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+          <Link href="/" className="flex items-center gap-2" aria-label="Hirelytics home">
             <Image
-              width={650}
-              height={200}
-              src="/images/hirelytics-full-logo.svg"
-              alt="Hirelytics"
-              className="h-20 md:h-24 w-auto max-w-full dark:invert-[0.15] dark:brightness-110 mb-6"
-              priority
+              src="/images/hirelytics-logo.svg"
+              alt=""
+              width={24}
+              height={24}
+              className="size-6 rounded-md ring-1 ring-white/25 dark:invert-[0.15] dark:brightness-110"
             />
-          </motion.div>
-
-          {/* Secondary Actions */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            <Link href="/demo/book" className="group transition-all hover:text-primary relative">
-              <div
-                className="inline-flex items-center gap-2 rounded-full border border-border/50 px-4 py-1.5 text-base font-medium backdrop-blur-sm relative overflow-hidden
-                           before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/20 before:via-blue-500/20 before:to-purple-500/20 before:opacity-100 before:transition-opacity before:duration-300
-                           hover:border-primary/50 hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)] hover:before:opacity-80"
-              >
-                <MessageSquareText size={14} className="relative z-10" />
-                <span className="relative z-10">{t('demo.bookDemo')}</span>
-                <ChevronRight
-                  size={14}
-                  className="transition-all duration-300 group-hover:translate-x-1 relative z-10"
-                />
-              </div>
-            </Link>
-          </div>
-
-          <motion.h1
-            className="mb-6 text-center text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl"
-            variants={fadeIn}
-          >
-            <span>{t('hero.revolutionizeHiring')} </span>
-            <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent">
-              <TypeAnimation
-                key={locale} // Add key prop to force re-render on locale change
-                sequence={headingSequence}
-                wrapper="span"
-                speed={50}
-                repeat={Infinity}
-                className="animate-gradient"
-              />
+            <span className="font-display text-sm font-semibold tracking-tight text-white">
+              Hirelytics
             </span>
-          </motion.h1>
-
-          <motion.p
-            className="mb-8 max-w-2xl text-center text-lg text-muted-foreground"
-            variants={fadeIn}
+          </Link>
+          <nav
+            className="hidden items-center gap-6 text-sm text-white/70 md:flex"
+            aria-label="Main"
           >
-            {t('hero.description')}
-          </motion.p>
-
-          <motion.div className="flex flex-wrap justify-center gap-4" variants={fadeIn}>
-            <Link href="/login">
-              <Button size="lg" className="gap-2 group relative overflow-hidden">
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                <Zap size={18} className="relative z-10" />
-                <span className="relative z-10">{common('buttons.getStarted')}</span>
-              </Button>
+            <a href="#features" className="transition-colors hover:text-white">
+              {t('featuresSection.title')}
+            </a>
+            <a href="#how-it-works" className="transition-colors hover:text-white">
+              {t('howItWorks.title')}
+            </a>
+            <Link href="/jobs" className="transition-colors hover:text-white">
+              {t('userAccess.findJobs')}
             </Link>
-            <Link href="/jobs">
-              <Button size="lg" variant="outline" className="gap-2 group relative overflow-hidden">
-                <span className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                <BriefcaseIcon size={18} className="relative z-10" />
-                <span className="relative z-10">{t('userAccess.findJobs')}</span>
-              </Button>
+            <Link href="/demo/book" className="transition-colors hover:text-white">
+              {t('demo.bookDemo')}
             </Link>
-            <Link href="/learn-more">
-              <Button size="lg" variant="outline" className="gap-2 group">
-                <Search size={18} />
-                <span>{common('buttons.howItWorks')}</span>
-                <ChevronRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </Button>
-            </Link>
-          </motion.div>
-
-          {/* User Access Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="mt-8"
+          </nav>
+          <Button
+            asChild
+            size="sm"
+            className="bg-brand-cyan text-brand-deep shadow-md shadow-brand-cyan/25 hover:bg-brand-cyan/90"
           >
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/login/candidate" className="group transition-all hover:text-primary">
-                <div className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-base font-medium backdrop-blur-sm hover:border-primary/30 hover:bg-primary/5">
-                  <UserIcon size={14} />
-                  {t('userAccess.candidateLogin')}
-                  <ChevronRight
-                    size={14}
-                    className="transition-transform group-hover:translate-x-0.5"
-                  />
-                </div>
-              </Link>
-              <Link href="/login/recruiter" className="group transition-all hover:text-primary">
-                <div className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-base font-medium backdrop-blur-sm hover:border-primary/30 hover:bg-primary/5">
-                  <Building2 size={14} />
-                  {t('userAccess.recruiterLogin')}
-                  <ChevronRight
-                    size={14}
-                    className="transition-transform group-hover:translate-x-0.5"
-                  />
-                </div>
-              </Link>
-              {/* <Link href="/wishlist" className="group transition-all hover:text-primary">
-                <div className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-medium backdrop-blur-sm hover:border-primary/30 hover:bg-primary/5">
-                  <Heart size={14} />
-                  {t('userAccess.wishlist')}
-                  <ChevronRight
-                    size={14}
-                    className="transition-transform group-hover:translate-x-0.5"
-                  />
-                </div>
-              </Link> */}
-            </div>
-          </motion.div>
-        </motion.div>
-      </AnimatedBackground>
+            <Link href="/login">{common('buttons.getStarted')}</Link>
+          </Button>
+        </div>
+      </LandingHeader>
 
-      {/* Features Section */}
-      <section id="features" className="w-full py-20 relative overflow-hidden">
-        {/* Background patterns */}
-        <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute top-0 right-0 h-[400px] w-[400px] rounded-full bg-blue-600/20 dark:bg-blue-500/20 blur-[100px] animate-pulse-slow"></div>
+      <main className="flex-1">
+        {/* Hero */}
+        <section className="relative overflow-hidden border-b border-brand-blue/40 bg-gradient-to-br from-brand-deep via-[#0d4166] to-brand-blue">
           <div
-            className="absolute bottom-0 left-0 h-[300px] w-[300px] rounded-full bg-purple-600/20 dark:bg-purple-500/20 blur-[100px] animate-pulse-slow"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          <div className="h-full w-full bg-[url('/patterns/dots.svg')] bg-repeat opacity-10"></div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            className="mb-16 text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={fadeIn}
-          >
-            <div className="mb-4 flex justify-center">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
-                <Sparkles size={16} />
-                {t('featuresSection.title')}
-              </div>
-            </div>
-            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">{t('featuresSection.subtitle')}</h2>
-            <p className="mx-auto max-w-2xl text-muted-foreground">
-              {t('featuresSection.description')}
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={staggerContainer}
-          >
-            {[
-              {
-                icon: <FileText className="text-blue-500" />,
-                title: t('featuresSection.smartJobPosting.title'),
-                description: t('featuresSection.smartJobPosting.description'),
-                color: 'blue',
-              },
-              {
-                icon: <LinkIcon className="text-indigo-500" />,
-                title: t('featuresSection.uniqueApplicationLinks.title'),
-                description: t('featuresSection.uniqueApplicationLinks.description'),
-                color: 'indigo',
-              },
-              {
-                icon: <Upload className="text-purple-500" />,
-                title: t('featuresSection.resumeAnalysis.title'),
-                description: t('featuresSection.resumeAnalysis.description'),
-                color: 'purple',
-              },
-              {
-                icon: <MessageSquareText className="text-pink-500" />,
-                title: t('featuresSection.aiPoweredInterviews.title'),
-                description: t('featuresSection.aiPoweredInterviews.description'),
-                color: 'pink',
-              },
-              {
-                icon: <ClipboardCheck className="text-green-500" />,
-                title: t('featuresSection.comprehensiveFeedback.title'),
-                description: t('featuresSection.comprehensiveFeedback.description'),
-                color: 'green',
-              },
-              {
-                icon: <LineChart className="text-orange-500" />,
-                title: t('featuresSection.dataDrivenInsights.title'),
-                description: t('featuresSection.dataDrivenInsights.description'),
-                color: 'orange',
-              },
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                className={`group relative overflow-hidden rounded-xl border bg-card p-6 shadow-sm transition-all`}
-                variants={featureCardVariants}
-                whileHover="hover"
-              >
-                <div
-                  className={`absolute inset-0 bg-${feature.color}-500/5 opacity-0 group-hover:opacity-100 transition-opacity`}
-                ></div>
-                <div
-                  className={`absolute bottom-0 left-0 h-1 w-0 bg-${feature.color}-500 group-hover:w-full transition-all duration-300`}
-                ></div>
-                <div className={`mb-4 rounded-full bg-${feature.color}-500/10 p-3 w-fit`}>
-                  {feature.icon}
-                </div>
-                <h3 className="mb-2 text-xl font-semibold">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section
-        id="how-it-works"
-        className="w-full bg-gradient-to-b from-background via-secondary/10 to-background py-20 relative overflow-hidden"
-      >
-        {/* Background patterns */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 left-0 h-[300px] w-[300px] rounded-full bg-indigo-600/10 dark:bg-indigo-500/10 blur-[100px] animate-pulse-slow"></div>
+            aria-hidden="true"
+            className="bg-dots-fade absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:22px_22px]"
+          />
           <div
-            className="absolute bottom-1/4 right-0 h-[250px] w-[250px] rounded-full bg-cyan-600/10 dark:bg-cyan-500/10 blur-[100px] animate-pulse-slow"
-            style={{ animationDelay: '3s' }}
-          ></div>
-          <div className="h-full w-full bg-[url('/patterns/circuit.svg')] bg-repeat opacity-5"></div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            className="mb-16 text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={fadeIn}
-          >
-            <div className="mb-4 flex justify-center">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
-                <Zap size={16} />
-                {t('howItWorks.title')}
-              </div>
-            </div>
-            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">{t('howItWorks.subtitle')}</h2>
-            <p className="mx-auto max-w-2xl text-muted-foreground">{t('howItWorks.description')}</p>
-          </motion.div>
-
-          <div className="relative">
-            {/* Connection lines for desktop */}
-            <div className="absolute left-1/2 top-24 hidden h-[calc(100%-6rem)] w-0.5 -translate-x-1/2 bg-gradient-to-b from-blue-500 via-purple-500 to-green-500 md:block"></div>
-
-            <motion.div
-              className="relative space-y-12 md:space-y-24"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              variants={staggerContainer}
-            >
-              {/* Step 1: Recruiter creates job posting */}
-              <motion.div
-                className="flex flex-col md:flex-row md:items-center md:justify-between"
-                variants={fadeIn}
-              >
-                <div className="md:w-5/12">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white">
-                      1
-                    </div>
-                    <h3 className="text-xl font-semibold">{t('howItWorks.steps.step1.title')}</h3>
-                  </div>
-                  <p className="text-muted-foreground">{t('howItWorks.steps.step1.description')}</p>
-                </div>
-
-                <div className="relative mt-6 md:mt-0 md:w-5/12">
-                  <div className="absolute -left-4 top-1/2 hidden h-4 w-4 -translate-y-1/2 rounded-full bg-blue-500 md:block"></div>
-                  <motion.div
-                    className="rounded-xl border bg-card p-6 shadow-md"
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="mb-3 flex justify-between">
-                      <div className="rounded-md bg-blue-500/10 px-3 py-1 text-sm text-blue-500">
-                        {t('howItWorks.steps.step1.label')}
-                      </div>
-                      <Building2 className="text-blue-500" size={20} />
-                    </div>
-                    <h4 className="mb-2 font-medium">{t('howItWorks.steps.step1.cardTitle')}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {t('howItWorks.steps.step1.cardDescription')}
-                    </p>
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Step 2: System generates job URL */}
-              <motion.div
-                className="flex flex-col md:flex-row-reverse md:items-center md:justify-between"
-                variants={fadeIn}
-              >
-                <div className="md:w-5/12">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500 text-white">
-                      2
-                    </div>
-                    <h3 className="text-xl font-semibold">{t('howItWorks.steps.step2.title')}</h3>
-                  </div>
-                  <p className="text-muted-foreground">{t('howItWorks.steps.step2.description')}</p>
-                </div>
-
-                <div className="relative mt-6 md:mt-0 md:w-5/12">
-                  <div className="absolute -right-4 top-1/2 hidden h-4 w-4 -translate-y-1/2 rounded-full bg-indigo-500 md:block"></div>
-                  <motion.div
-                    className="rounded-xl border bg-card p-6 shadow-md"
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="mb-3 flex justify-between">
-                      <div className="rounded-md bg-indigo-500/10 px-3 py-1 text-sm text-indigo-500">
-                        {t('howItWorks.steps.step2.label')}
-                      </div>
-                      <LinkIcon className="text-indigo-500" size={20} />
-                    </div>
-                    <h4 className="mb-2 font-medium">{t('howItWorks.steps.step2.cardTitle')}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {t('howItWorks.steps.step2.cardDescription')}
-                    </p>
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Step 3: Candidate applies via URL */}
-              <motion.div
-                className="flex flex-col md:flex-row md:items-center md:justify-between"
-                variants={fadeIn}
-              >
-                <div className="md:w-5/12">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-500 text-white">
-                      3
-                    </div>
-                    <h3 className="text-xl font-semibold">{t('howItWorks.steps.step3.title')}</h3>
-                  </div>
-                  <p className="text-muted-foreground">{t('howItWorks.steps.step3.description')}</p>
-                </div>
-
-                <div className="relative mt-6 md:mt-0 md:w-5/12">
-                  <div className="absolute -left-4 top-1/2 hidden h-4 w-4 -translate-y-1/2 rounded-full bg-purple-500 md:block"></div>
-                  <motion.div
-                    className="rounded-xl border bg-card p-6 shadow-md"
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="mb-3 flex justify-between">
-                      <div className="rounded-md bg-purple-500/10 px-3 py-1 text-sm text-purple-500">
-                        {t('howItWorks.steps.step3.label')}
-                      </div>
-                      <GraduationCap className="text-purple-500" size={20} />
-                    </div>
-                    <h4 className="mb-2 font-medium">{t('howItWorks.steps.step3.cardTitle')}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {t('howItWorks.steps.step3.cardDescription')}
-                    </p>
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Step 4: AI analyzes resume */}
-              <motion.div
-                className="flex flex-col md:flex-row-reverse md:items-center md:justify-between"
-                variants={fadeIn}
-              >
-                <div className="md:w-5/12">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-pink-500 text-white">
-                      4
-                    </div>
-                    <h3 className="text-xl font-semibold">{t('howItWorks.steps.step4.title')}</h3>
-                  </div>
-                  <p className="text-muted-foreground">{t('howItWorks.steps.step4.description')}</p>
-                </div>
-
-                <div className="relative mt-6 md:mt-0 md:w-5/12">
-                  <div className="absolute -right-4 top-1/2 hidden h-4 w-4 -translate-y-1/2 rounded-full bg-pink-500 md:block"></div>
-                  <motion.div
-                    className="rounded-xl border bg-card p-6 shadow-md"
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="mb-3 flex justify-between">
-                      <div className="rounded-md bg-pink-500/10 px-3 py-1 text-sm text-pink-500">
-                        {t('howItWorks.steps.step4.label')}
-                      </div>
-                      <Upload className="text-pink-500" size={20} />
-                    </div>
-                    <h4 className="mb-2 font-medium">{t('howItWorks.steps.step4.cardTitle')}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {t('howItWorks.steps.step4.cardDescription')}
-                    </p>
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Step 5: AI conducts interview */}
-              <motion.div
-                className="flex flex-col md:flex-row md:items-center md:justify-between"
-                variants={fadeIn}
-              >
-                <div className="md:w-5/12">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white">
-                      5
-                    </div>
-                    <h3 className="text-xl font-semibold">{t('howItWorks.steps.step5.title')}</h3>
-                  </div>
-                  <p className="text-muted-foreground">{t('howItWorks.steps.step5.description')}</p>
-                </div>
-
-                <div className="relative mt-6 md:mt-0 md:w-5/12">
-                  <div className="absolute -left-4 top-1/2 hidden h-4 w-4 -translate-y-1/2 rounded-full bg-blue-600 md:block"></div>
-                  <motion.div
-                    className="rounded-xl border bg-card p-6 shadow-md"
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="mb-3 flex justify-between">
-                      <div className="rounded-md bg-blue-600/10 px-3 py-1 text-sm text-blue-600">
-                        {t('howItWorks.steps.step5.label')}
-                      </div>
-                      <MessageSquareText className="text-blue-600" size={20} />
-                    </div>
-                    <h4 className="mb-2 font-medium">{t('howItWorks.steps.step5.cardTitle')}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {t('howItWorks.steps.step5.cardDescription')}
-                    </p>
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Step 6: System provides feedback */}
-              <motion.div
-                className="flex flex-col md:flex-row-reverse md:items-center md:justify-between"
-                variants={fadeIn}
-              >
-                <div className="md:w-5/12">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white">
-                      6
-                    </div>
-                    <h3 className="text-xl font-semibold">{t('howItWorks.steps.step6.title')}</h3>
-                  </div>
-                  <p className="text-muted-foreground">{t('howItWorks.steps.step6.description')}</p>
-                </div>
-
-                <div className="relative mt-6 md:mt-0 md:w-5/12">
-                  <div className="absolute -right-4 top-1/2 hidden h-4 w-4 -translate-y-1/2 rounded-full bg-green-500 md:block"></div>
-                  <motion.div
-                    className="rounded-xl border bg-card p-6 shadow-md"
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="mb-3 flex justify-between">
-                      <div className="rounded-md bg-green-500/10 px-3 py-1 text-sm text-green-500">
-                        {t('howItWorks.steps.step6.label')}
-                      </div>
-                      <ClipboardCheck className="text-green-500" size={20} />
-                    </div>
-                    <h4 className="mb-2 font-medium">{t('howItWorks.steps.step6.cardTitle')}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {t('howItWorks.steps.step6.cardDescription')}
-                    </p>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-
-          <motion.div
-            className="mt-16 flex justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-          >
-            <Link href="/login">
-              <Button size="lg" className="gap-2">
-                <ArrowRight size={18} />
-                {t('howItWorks.getStarted')}
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="w-full py-20 bg-gradient-to-b from-background via-primary/5 to-background relative overflow-hidden">
-        {/* Background patterns */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 left-1/4 h-[350px] w-[350px] rounded-full bg-purple-600/10 dark:bg-purple-500/10 blur-[120px] animate-pulse-slow"></div>
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-32 left-[6%] h-[480px] w-[640px] rounded-full bg-brand-cyan/20 blur-[110px]"
+          />
           <div
-            className="absolute bottom-0 right-1/4 h-[300px] w-[300px] rounded-full bg-blue-600/10 dark:bg-blue-500/10 blur-[120px] animate-pulse-slow"
-            style={{ animationDelay: '2.5s' }}
-          ></div>
-          <div className="h-full w-full bg-[url('/patterns/waves.svg')] bg-repeat opacity-5"></div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            className="mb-16 text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={fadeIn}
-          >
-            <div className="mb-4 flex justify-center">
-              {' '}
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
-                <Users size={16} />
-                {t('testimonials.title')}
-              </div>
-            </div>
-            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">{t('testimonials.subtitle')}</h2>
-            <p className="mx-auto max-w-2xl text-muted-foreground">
-              {t('testimonials.description')}
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="grid gap-8 md:grid-cols-3"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={staggerContainer}
-          >
-            {[
-              {
-                quote:
-                  'Hirelytics has revolutionized our recruitment process. We&apos;ve reduced our time-to-hire by 40% and found better quality candidates.',
-                name: 'Sarah Johnson',
-                role: 'HR Director',
-                company: 'TechCorp',
-                color: 'blue',
-              },
-              {
-                quote:
-                  'The AI interview process is remarkably effective. It asks relevant questions and provides detailed feedback that helps us make better hiring decisions.',
-                name: 'David Rodriguez',
-                role: 'Talent Acquisition Manager',
-                company: 'InnovateX',
-                color: 'purple',
-              },
-              {
-                quote:
-                  'As a candidate, I love how the platform matched me with jobs that truly aligned with my skills and career goals. The AI interview was surprisingly conversational.',
-                name: 'Michael Chen',
-                role: 'Software Engineer',
-                company: 'Hired via Hirelytics',
-                color: 'green',
-              },
-            ].map((testimonial, index) => (
-              <motion.div
-                key={index}
-                className={`relative overflow-hidden rounded-xl border bg-card p-8 shadow-md`}
-                variants={featureCardVariants}
-                whileHover="hover"
-              >
-                <div
-                  className={`absolute top-0 left-0 h-1 w-full bg-${testimonial.color}-500`}
-                ></div>
-                <div
-                  className={`absolute top-0 right-0 h-20 w-20 -translate-y-10 translate-x-10 rounded-full bg-${testimonial.color}-500/10 blur-3xl`}
-                ></div>
-
-                <div className="mb-6 text-xl italic text-muted-foreground">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-full bg-${testimonial.color}-500/10 text-${testimonial.color}-500`}
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-24 right-[4%] h-[380px] w-[520px] rounded-full bg-white/10 blur-[100px]"
+          />
+          <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-b from-transparent to-background" />
+          <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h1 className="font-display text-4xl font-medium tracking-tight text-pretty text-white sm:text-5xl">
+                {[
+                  ...t('hero.revolutionizeHiring').split(' '),
+                  ...t('typingAnimation.smartRecruitment').split(' '),
+                ].map((word, index) => (
+                  <span
+                    key={`${word}-${index}`}
+                    className="hero-word"
+                    style={{ animationDelay: `${150 + index * 60}ms` }}
                   >
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {testimonial.role}, {testimonial.company}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-slate-900/90 via-slate-800/90 to-slate-900/90 dark:from-slate-800/90 dark:via-slate-900/90 dark:to-slate-800/90 py-24 mb-24 text-white">
-        {/* Enhanced background elements */}
-        <div className="absolute inset-0 bg-grid-white/5 dark:bg-grid-white/3 bg-[length:20px_20px] opacity-3"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-blue-500/15 to-purple-500/15 dark:from-primary/30 dark:via-blue-500/20 dark:to-purple-500/20 opacity-30"></div>
-
-        {/* Light color pattern gradient overlay */}
-        <div className="absolute inset-0 opacity-3">
-          <div className="absolute top-0 left-0 h-full w-full bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.03)_0%,transparent_50%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.05)_0%,transparent_50%)]"></div>
-          <div className="absolute top-0 right-0 h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.02)_0%,transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.04)_0%,transparent_50%)]"></div>
-          <div className="absolute bottom-0 left-0 h-full w-full bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.02)_0%,transparent_50%)] dark:bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
-          <div className="absolute bottom-0 right-0 h-full w-full bg-[radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.01)_0%,transparent_50%)] dark:bg-[radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.02)_0%,transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.01)_50%,transparent_75%)] bg-[length:20px_20px]"></div>
-        </div>
-
-        {/* Animated decorative elements */}
-        <div className="absolute top-0 left-1/4 h-64 w-64 rounded-full bg-white/1 dark:bg-white/2 blur-3xl animate-pulse-slow"></div>
-        <div
-          className="absolute bottom-0 right-1/4 h-80 w-80 rounded-full bg-white/1 dark:bg-white/2 blur-3xl animate-pulse-slow"
-          style={{ animationDelay: '1.5s' }}
-        ></div>
-        <div
-          className="absolute top-1/2 right-10 h-40 w-40 -translate-y-1/2 rounded-full bg-white/1 dark:bg-white/2 blur-2xl animate-pulse-slow"
-          style={{ animationDelay: '0.7s' }}
-        ></div>
-
-        {/* Decorative shapes */}
-        <div className="absolute top-10 left-10 h-20 w-20 rounded-full border border-white/2 dark:border-white/3 opacity-10 dark:opacity-20"></div>
-        <div className="absolute bottom-10 right-10 h-16 w-16 rounded-full border border-white/2 dark:border-white/3 opacity-10 dark:opacity-20"></div>
-        <div className="absolute top-1/2 left-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/1 dark:border-white/2 opacity-5 dark:opacity-10"></div>
-
-        <div className="container relative z-10 mx-auto px-4">
-          <motion.div
-            className="mx-auto max-w-3xl text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            animate={{ y: [0, -8, 0] }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              repeatType: 'reverse',
-              ease: 'easeInOut',
-            }}
-          >
-            <motion.div
-              className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/5 dark:bg-white/10 backdrop-blur-sm px-4 py-1.5 text-sm font-medium"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-            >
-              <Sparkles size={16} className="text-white" />
-              {t('footer.cta.title')}
-            </motion.div>
-
-            <h2 className="mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">
-              {t('footer.cta.heading')}
-            </h2>
-            <p className="mb-10 text-lg text-white/90 max-w-2xl mx-auto">
-              {t('footer.cta.description')}
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-6">
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-primary via-blue-500 to-purple-500 px-8 py-3 text-sm font-medium text-white shadow hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 transform hover:-translate-y-1"
-              >
-                <Sparkles size={16} className="relative z-10" />
-                <span className="relative z-10">{common('buttons.getStarted')}</span>
-              </Link>
-              <Link href="#how-it-works">
+                    {word}{' '}
+                  </span>
+                ))}
+              </h1>
+              <p className="rise-in mt-5 max-w-xl text-lg text-pretty text-white/75">
+                {t('hero.description')}
+              </p>
+              <div className="rise-in rise-in-d1 mt-8 flex flex-wrap items-center gap-3">
                 <Button
+                  asChild
                   size="lg"
-                  variant="outline"
-                  className="gap-2 border-white/90 text-white hover:border-white hover:bg-white/10 dark:border-white/80 dark:hover:border-white dark:hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1"
+                  className="group bg-brand-cyan text-brand-deep shadow-lg shadow-brand-cyan/25 hover:bg-brand-cyan/90"
                 >
-                  <Search size={18} />
-                  <span>{t('footer.cta.learnMore')}</span>
-                  <ChevronRight
-                    size={16}
-                    className="ml-1 transition-transform group-hover:translate-x-1"
-                  />
+                  <Link href="/login">
+                    {common('buttons.getStarted')}
+                    <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </Link>
                 </Button>
-              </Link>
+                <Button
+                  asChild
+                  size="lg"
+                  className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
+                >
+                  <Link href="/jobs">
+                    <Briefcase className="size-4" />
+                    {t('userAccess.findJobs')}
+                  </Link>
+                </Button>
+              </div>
+              <div className="rise-in rise-in-d1 mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white/75">
+                <Link
+                  href="/login/candidate"
+                  className="inline-flex items-center gap-1.5 transition-colors hover:text-white"
+                >
+                  <User className="size-4" />
+                  {t('userAccess.candidateLogin')}
+                </Link>
+                <span aria-hidden="true" className="h-3 w-px bg-white/25" />
+                <Link
+                  href="/login/recruiter"
+                  className="inline-flex items-center gap-1.5 transition-colors hover:text-white"
+                >
+                  <Building2 className="size-4" />
+                  {t('userAccess.recruiterLogin')}
+                </Link>
+                <span aria-hidden="true" className="h-3 w-px bg-white/25" />
+                <Link
+                  href="/demo/book"
+                  className="inline-flex items-center gap-1.5 transition-colors hover:text-white"
+                >
+                  <MessageSquareText className="size-4" />
+                  {t('demo.bookDemo')}
+                </Link>
+              </div>
             </div>
 
-            <motion.p
-              className="mt-8 text-sm text-white/60 dark:text-white/70"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.6 }}
-            >
-              {t('footer.cta.noCreditCard')}
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
+            {/* Product illustration */}
+            <div aria-hidden="true" className="rise-in rise-in-d2 relative lg:justify-self-end">
+              <div className="orbit-ring pointer-events-none absolute -top-10 -right-10 h-36 w-36 rounded-full border-2 border-dashed border-brand-cyan/60" />
+              <SpotlightCard className="w-full max-w-md overflow-hidden rounded-xl border bg-card shadow-xl shadow-brand-deep/40 ring-1 ring-white/15">
+                <div className="flex items-center justify-between border-b px-5 py-3.5">
+                  <div>
+                    <p className="font-display text-sm font-medium tracking-tight">
+                      Interview scorecard
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      Senior Frontend Engineer, live session
+                    </p>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-warning/25 bg-warning/10 px-2 py-0.5 text-xs font-medium text-warning">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-warning" />
+                    In progress
+                  </span>
+                </div>
+                <div className="px-5 py-4">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>Question 3 of 5</span>
+                    <span className="numeric font-mono">14:22</span>
+                  </div>
+                  <div className="mt-2 flex gap-1">
+                    {[0, 1, 2, 3, 4].map((step) => (
+                      <span
+                        key={step}
+                        style={{ animationDelay: `${450 + step * 70}ms` }}
+                        className={`h-1 flex-1 rounded-full ${step < 3 ? 'bar-fill bg-primary' : 'bg-muted'}`}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-5 space-y-4">
+                    {[
+                      { label: 'Communication', score: '4.2', width: '84%' },
+                      { label: 'Problem solving', score: '3.8', width: '76%' },
+                      { label: 'Technical depth', score: '4.5', width: '90%' },
+                    ].map((item, index) => (
+                      <div key={item.label}>
+                        <div className="flex items-baseline justify-between text-sm">
+                          <span className="font-medium">{item.label}</span>
+                          <span className="numeric font-mono text-muted-foreground">
+                            {item.score}
+                          </span>
+                        </div>
+                        <div className="relative mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
+                          <div
+                            className="bar-fill h-full rounded-full bg-primary"
+                            style={{ width: item.width, animationDelay: `${600 + index * 130}ms` }}
+                          />
+                          <div className="score-ticks absolute inset-0" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center justify-between border-t bg-muted/40 px-5 py-3">
+                  <span className="text-xs text-muted-foreground">Recommendation</span>
+                  <span className="pop-in inline-flex items-center rounded-full border border-success/25 bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
+                    Proceed to final round
+                  </span>
+                </div>
+              </SpotlightCard>
+            </div>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section id="features" className="scroll-mt-16 py-16 md:py-24">
+          <Reveal className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+            <div className="max-w-2xl">
+              <p className="text-sm font-medium text-primary">{t('featuresSection.title')}</p>
+              <h2 className="mt-2 font-display text-3xl font-medium tracking-tight">
+                {t('featuresSection.subtitle')}
+              </h2>
+              <p className="mt-3 text-muted-foreground">{t('featuresSection.description')}</p>
+            </div>
+            <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-xl border bg-border sm:grid-cols-2 lg:grid-cols-3">
+              {features.map((feature) => (
+                <div key={feature.title} className="bg-card p-6">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <feature.icon className="size-5" aria-hidden="true" />
+                  </div>
+                  <h3 className="mt-4 font-semibold">{feature.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {feature.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </section>
+
+        {/* How it works */}
+        <section id="how-it-works" className="scroll-mt-16 border-t bg-brand-cyan/5 py-16 md:py-24">
+          <Reveal className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+            <div className="max-w-2xl">
+              <p className="text-sm font-medium text-primary">{t('howItWorks.title')}</p>
+              <h2 className="mt-2 font-display text-3xl font-medium tracking-tight">
+                {t('howItWorks.subtitle')}
+              </h2>
+              <p className="mt-3 text-muted-foreground">{t('howItWorks.description')}</p>
+            </div>
+            <ol className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+              {steps.map((step, index) => (
+                <li key={step.title}>
+                  <div className="numeric flex h-8 w-8 items-center justify-center rounded-full border bg-background text-sm font-medium">
+                    {index + 1}
+                  </div>
+                  <h3 className="mt-4 font-semibold">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {step.description}
+                  </p>
+                </li>
+              ))}
+            </ol>
+            <div className="mt-14">
+              <Button asChild size="lg">
+                <Link href="/login">
+                  {t('howItWorks.getStarted')}
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* Testimonials */}
+        <section className="border-t py-16 md:py-24">
+          <Reveal className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+            <div className="max-w-2xl">
+              <p className="text-sm font-medium text-primary">{t('testimonials.title')}</p>
+              <h2 className="mt-2 font-display text-3xl font-medium tracking-tight">
+                {t('testimonials.subtitle')}
+              </h2>
+              <p className="mt-3 text-muted-foreground">{t('testimonials.description')}</p>
+            </div>
+            <div className="mt-12 grid gap-10 md:grid-cols-3">
+              {testimonials.map((testimonial) => (
+                <figure key={testimonial.name}>
+                  <blockquote className="text-sm leading-relaxed text-muted-foreground">
+                    &ldquo;{testimonial.quote}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-4 flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-sm font-medium">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">{testimonial.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {testimonial.role}, {testimonial.company}
+                      </p>
+                    </div>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </Reveal>
+        </section>
+
+        {/* CTA */}
+        <section className="px-4 pb-16 sm:px-6 md:pb-24">
+          <Reveal className="mx-auto w-full max-w-6xl">
+            <div className="brand-panel rounded-xl bg-gradient-to-br from-brand-deep to-brand-blue px-6 py-14 text-center md:py-20">
+              <h2 className="font-display text-3xl font-medium tracking-tight text-balance text-white">
+                {t('footer.cta.heading')}
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty text-white/70">
+                {t('footer.cta.description')}
+              </p>
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-brand-cyan text-brand-deep shadow-lg shadow-brand-cyan/25 hover:bg-brand-cyan/90"
+                >
+                  <Link href="/login">{common('buttons.getStarted')}</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
+                >
+                  <a href="#how-it-works">{t('footer.cta.learnMore')}</a>
+                </Button>
+              </div>
+              <p className="mt-6 text-sm text-white/60">{t('footer.cta.noCreditCard')}</p>
+            </div>
+          </Reveal>
+        </section>
+      </main>
 
       <Footer />
     </div>

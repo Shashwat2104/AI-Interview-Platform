@@ -106,7 +106,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
   if (error) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-        <Card className="p-4 border-none bg-[#121212]">
+        <Card className="p-4 border-none bg-muted/40">
           <div className="text-center">
             <motion.h1
               className="text-xl font-bold mb-3"
@@ -139,7 +139,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
 
   return (
     <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-      <Card className="border-none bg-[#121212] shadow-none overflow-hidden">
+      <Card className="border-none bg-muted/40 shadow-none overflow-hidden">
         <CardHeader className="text-center py-6 px-4">
           <motion.h1 className="text-2xl font-bold mb-3" variants={itemVariants}>
             Resume Analysis
@@ -190,7 +190,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
               <div className="w-full space-y-6 mb-6 max-w-4xl mx-auto px-4">
                 {/* Match Score Row */}
                 <motion.div variants={itemVariants}>
-                  <Card className="p-6 border-none bg-[#1c1c1c] shadow-none hover:bg-[#242424] transition-colors">
+                  <Card className="p-6 border-none bg-muted/40 shadow-none hover:bg-muted transition-colors">
                     <div className="w-full">
                       <h3 className="text-base font-medium mb-4">Match Score</h3>
                       <div className="flex items-center gap-8">
@@ -206,7 +206,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
                           {application?.parsedResume?.matchScore ?? 0}%
                         </div>
                         <div className="flex-1">
-                          <div className="h-3 bg-[#2a2a2a] rounded-full overflow-hidden">
+                          <div className="h-3 bg-muted rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full transition-all"
                               style={{
@@ -234,7 +234,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
 
                 {/* About Row */}
                 <motion.div variants={itemVariants}>
-                  <Card className="p-6 border-none bg-[#1c1c1c] shadow-none hover:bg-[#242424] transition-colors">
+                  <Card className="p-6 border-none bg-muted/40 shadow-none hover:bg-muted transition-colors">
                     <div className="flex items-start gap-4">
                       <User className="h-6 w-6 text-purple-400 flex-shrink-0" />
                       <div className="w-full">
@@ -249,7 +249,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
 
                 {/* Skills Row */}
                 <motion.div variants={itemVariants}>
-                  <Card className="p-6 border-none bg-[#1c1c1c] shadow-none hover:bg-[#242424] transition-colors">
+                  <Card className="p-6 border-none bg-muted/40 shadow-none hover:bg-muted transition-colors">
                     <div className="flex items-start gap-4">
                       <Code className="h-6 w-6 text-blue-400 flex-shrink-0" />
                       <div className="w-full">
@@ -259,7 +259,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
                             <Badge
                               key={index}
                               variant="outline"
-                              className="text-sm py-1 px-3 bg-[#2a2a2a] border-[#404040] text-[#f1f1f1] font-medium"
+                              className="text-sm py-1 px-3 bg-muted border-border font-medium"
                             >
                               {skill}
                             </Badge>
@@ -278,7 +278,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
 
                 {/* Experience Row */}
                 <motion.div variants={itemVariants}>
-                  <Card className="p-6 border-none bg-[#1c1c1c] shadow-none hover:bg-[#242424] transition-colors">
+                  <Card className="p-6 border-none bg-muted/40 shadow-none hover:bg-muted transition-colors">
                     <div className="flex items-start gap-4">
                       <Briefcase className="h-6 w-6 text-yellow-400 flex-shrink-0" />
                       <div className="w-full">
@@ -301,7 +301,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
                                     <Badge
                                       key={index}
                                       variant="outline"
-                                      className="text-sm py-1 px-3 bg-[#2a2a2a] border-[#404040] text-[#f1f1f1] font-medium"
+                                      className="text-sm py-1 px-3 bg-muted border-border font-medium"
                                     >
                                       {company}
                                     </Badge>
@@ -322,15 +322,15 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
 
                 {/* Education Row */}
                 <motion.div variants={itemVariants}>
-                  <Card className="p-6 border-none bg-[#1c1c1c] shadow-none hover:bg-[#242424] transition-colors">
+                  <Card className="p-6 border-none bg-muted/40 shadow-none hover:bg-muted transition-colors">
                     <div className="flex items-start gap-4">
-                      <GraduationCap className="h-6 w-6 text-green-400 flex-shrink-0" />
+                      <GraduationCap className="h-6 w-6 text-success flex-shrink-0" />
                       <div className="w-full">
                         <h3 className="text-base font-medium mb-3">Education</h3>
                         {(application?.parsedResume?.education?.length ?? 0) > 0 ? (
                           <div className="space-y-4">
                             {(application?.parsedResume?.education ?? []).map((edu, index) => (
-                              <div key={index} className="border-l-2 border-[#2a2a2a] pl-4 py-1">
+                              <div key={index} className="border-l-2 border-border pl-4 py-1">
                                 <p className="text-sm font-medium mb-1">{edu.degree}</p>
                                 <p className="text-sm text-muted-foreground">{edu.institution}</p>
                               </div>
@@ -348,7 +348,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
 
                 {/* AI Analysis Row */}
                 <motion.div variants={itemVariants}>
-                  <Card className="p-6 border-none bg-[#1c1c1c] shadow-none hover:bg-[#242424] transition-colors">
+                  <Card className="p-6 border-none bg-muted/40 shadow-none hover:bg-muted transition-colors">
                     <div className="flex items-start gap-4">
                       <Brain className="h-6 w-6 text-indigo-400 flex-shrink-0" />
                       <div className="w-full">
@@ -370,7 +370,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
                                       <Badge
                                         key={index}
                                         variant="outline"
-                                        className="text-sm py-1 px-3 bg-[#2a2a2a] border-[#404040] text-green-400 font-medium"
+                                        className="text-sm py-1 px-3 bg-muted border-border text-success font-medium"
                                       >
                                         {skill}
                                       </Badge>
@@ -389,7 +389,7 @@ export function ResumeAnalysis({ applicationId }: ResumeAnalysisProps) {
                                       <Badge
                                         key={index}
                                         variant="outline"
-                                        className="text-sm py-1 px-3 bg-[#2a2a2a] border-[#404040] text-red-400 font-medium"
+                                        className="text-sm py-1 px-3 bg-muted border-border text-destructive font-medium"
                                       >
                                         {skill}
                                       </Badge>

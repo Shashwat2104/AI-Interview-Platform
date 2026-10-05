@@ -9,19 +9,9 @@ import { Button } from '@/components/ui/button';
 export default function DemoPage() {
   const t = useTranslations('Demo');
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background relative">
+    <div className="min-h-screen relative">
       {/* Background elements */}
-      <div className="absolute inset-0 z-0 opacity-40">
-        <div className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full bg-blue-600/30 dark:bg-blue-500/30 blur-[120px] animate-pulse-slow"></div>
-        <div
-          className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-purple-600/30 dark:bg-purple-500/30 blur-[120px] animate-pulse-slow"
-          style={{ animationDelay: '2s' }}
-        ></div>
-        <div
-          className="absolute top-1/3 left-1/4 h-[250px] w-[250px] rounded-full bg-cyan-600/30 dark:bg-cyan-500/30 blur-[90px] animate-pulse-slow"
-          style={{ animationDelay: '3s' }}
-        ></div>
-      </div>
+      <div className="absolute inset-0 z-0 opacity-40"></div>
 
       {/* Pattern overlay */}
       <div className="absolute inset-0 z-0 opacity-10">
@@ -41,7 +31,7 @@ export default function DemoPage() {
             <Button
               size="lg"
               variant="default"
-              className="gap-3 text-lg font-medium px-8 h-14 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 hover:from-gray-800 hover:via-gray-700 hover:to-gray-800 text-white shadow-xl hover:shadow-2xl transition-all duration-300 ease-out"
+              className="gap-3 text-lg font-medium px-8 h-14 bg-primary text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
             >
               <Sparkles className="h-6 w-6" />
               {t('page.bookPersonalizedDemo')}

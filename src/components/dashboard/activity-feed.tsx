@@ -1,36 +1,26 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { StatusBadge } from '@/components/shared/status-badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 interface ActivityItemProps {
   title: string;
-  description: string;
+  description?: string;
   timestamp: string;
   status?: string;
 }
 
-const StatusColors: Record<string, string> = {
-  pending: 'bg-yellow-500',
-  reviewed: 'bg-blue-500',
-  accepted: 'bg-green-500',
-  rejected: 'bg-red-500',
-};
-
 function ActivityItem({ title, description, timestamp, status }: ActivityItemProps) {
   return (
-    <div className="flex items-start gap-4 rounded-lg border p-4">
-      {status && (
-        <span
-          className={cn('mt-0.5 h-2 w-2 rounded-full', StatusColors[status] || 'bg-gray-500')}
-        />
-      )}
-      <div className="flex-1 space-y-1">
-        <p className="font-medium leading-none">{title}</p>
-        <p className="text-sm text-muted-foreground">{description}</p>
+    <li className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium leading-snug">{title}</p>
+        {description && <p className="truncate text-sm text-muted-foreground">{description}</p>}
       </div>
-      <div className="text-sm text-muted-foreground">{timestamp}</div>
-    </div>
+      {status && <StatusBadge status={status} />}
+      <time className="numeric shrink-0 text-xs text-muted-foreground">{timestamp}</time>
+    </li>
   );
 }
 
@@ -44,6 +34,7 @@ interface ActivityFeedProps {
 
 export function ActivityFeed({
   title,
+  description,
   items,
   className,
   emptyMessage = 'No recent activity',
@@ -51,13 +42,18 @@ export function ActivityFeed({
   return (
     <Card className={cn('col-span-1', className)}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="text-base">{title}</CardTitle>
+        {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
-      <CardContent className="grid gap-4">
+      <CardContent>
         {items.length > 0 ? (
-          items.map((item, i) => <ActivityItem key={i} {...item} />)
+          <ul className="divide-y">
+            {items.map((item, i) => (
+              <ActivityItem key={i} {...item} />
+            ))}
+          </ul>
         ) : (
-          <p className="text-sm text-muted-foreground">{emptyMessage}</p>
+          <p className="py-8 text-center text-sm text-muted-foreground">{emptyMessage}</p>
         )}
       </CardContent>
     </Card>

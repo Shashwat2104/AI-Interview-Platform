@@ -23,16 +23,10 @@ export function Footer() {
       </div>
       {/* Background gradients and patterns */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background/80"></div>
-        <div className="absolute top-0 right-0 h-[300px] w-[300px] rounded-full bg-primary/10 blur-[80px] animate-pulse-slow"></div>
-        <div
-          className="absolute bottom-0 left-0 h-[250px] w-[250px] rounded-full bg-blue-600/10 dark:bg-blue-500/10 blur-[80px] animate-pulse-slow"
-          style={{ animationDelay: '2s' }}
-        ></div>
         <div className="h-full w-full bg-[url('/patterns/dots.svg')] bg-repeat opacity-10"></div>
 
         {/* Additional light effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-primary/5 to-transparent opacity-30"></div>
+
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(var(--primary-rgb),0.05),transparent_50%)]"></div>
       </div>
 
@@ -248,7 +242,7 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             {t('footer.copyright', { year: new Date().getFullYear() })}
           </p>
-          <p className="text-xs mt-2 text-muted-foreground">Made with ❤️ by Shashwat</p>
+          <p className="text-xs mt-2 text-muted-foreground">Made by Shashwat</p>
         </div>
       </div>
     </footer>

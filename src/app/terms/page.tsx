@@ -24,12 +24,6 @@ export default function TermsPage() {
     <div className="min-h-screen bg-background relative">
       {/* Background gradients and patterns */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/10 to-background"></div>
-        <div className="absolute top-1/4 left-0 h-[300px] w-[300px] rounded-full bg-indigo-600/10 dark:bg-indigo-500/10 blur-[100px] animate-pulse-slow"></div>
-        <div
-          className="absolute bottom-1/4 right-0 h-[250px] w-[250px] rounded-full bg-cyan-600/10 dark:bg-cyan-500/10 blur-[100px] animate-pulse-slow"
-          style={{ animationDelay: '3s' }}
-        ></div>
         <div className="h-full w-full bg-[url('/patterns/circuit.svg')] bg-repeat opacity-5"></div>
       </div>
 

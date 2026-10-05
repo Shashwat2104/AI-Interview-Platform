@@ -31,7 +31,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   height={24}
                   className="!size-6 mr-2 dark:invert-[0.15] dark:brightness-110"
                 />
-                <span className="text-base font-semibold">Hirelytics</span>
+                <span className="font-display text-base font-semibold tracking-tight">
+                  Hirelytics
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

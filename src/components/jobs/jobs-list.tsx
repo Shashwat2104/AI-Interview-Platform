@@ -1,10 +1,13 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Briefcase, Loader2 } from 'lucide-react';
 import * as React from 'react';
 import { useInView } from 'react-intersection-observer';
 
+import { EmptyState } from '@/components/shared/empty-state';
+import { ErrorState } from '@/components/shared/error-state';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { IJob } from '@/models/job';
 
 import { JobCard } from './job-card';
@@ -17,6 +20,7 @@ interface JobWithId extends Omit<IJob, '_id'> {
 export function JobsList() {
   const [jobs, setJobs] = React.useState<JobWithId[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
   const [hasMore, setHasMore] = React.useState(false);
   const [page, setPage] = React.useState(1);
 
@@ -45,30 +49,32 @@ export function JobsList() {
   );
 
   // Initial load and filter changes
-  React.useEffect(() => {
-    const loadJobs = async () => {
-      setLoading(true);
-      try {
-        const queryString = buildQueryString(1);
-        const response = await fetch(`/api/jobs/list?${queryString}`);
+  const loadJobs = React.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const queryString = buildQueryString(1);
+      const response = await fetch(`/api/jobs/list?${queryString}`);
 
-        if (!response.ok) {
-          throw new Error(`Error fetching jobs: ${response.status}`);
-        }
-
-        const result = await response.json();
-        setJobs(result.jobs);
-        setHasMore(result.hasMore);
-        setPage(1);
-      } catch (error) {
-        console.error('Failed to fetch jobs:', error);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(`Error fetching jobs: ${response.status}`);
       }
-    };
 
-    loadJobs();
+      const result = await response.json();
+      setJobs(result.jobs);
+      setHasMore(result.hasMore);
+      setPage(1);
+    } catch (err) {
+      console.error('Failed to fetch jobs:', err);
+      setError('Unable to load jobs');
+    } finally {
+      setLoading(false);
+    }
   }, [buildQueryString]);
+
+  React.useEffect(() => {
+    loadJobs();
+  }, [loadJobs]);
 
   // Load more when scrolled to bottom
   React.useEffect(() => {
@@ -113,9 +119,17 @@ export function JobsList() {
     setLocation(value);
   };
 
+  const hasActiveFilters = Boolean(search) || selectedSkills.length > 0 || Boolean(location);
+
+  const clearFilters = () => {
+    setSearch('');
+    setSelectedSkills([]);
+    setLocation('');
+  };
+
   return (
-    <div className="container px-4 py-8 mx-auto">
-      <div className="backdrop-blur-sm rounded-lg p-4 mb-6 h-full transition-all duration-300 hover:shadow-md hover:border-primary/30 bg-background/70 border border-primary/10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+      <div className="mb-6 rounded-lg border bg-card p-4">
         <JobFilter
           onSearchChange={handleSearchChange}
           onSkillsChange={handleSkillsChange}
@@ -123,22 +137,48 @@ export function JobsList() {
         />
       </div>
 
-      {jobs.length === 0 && !loading ? (
-        <div className="text-center py-16">
-          <h3 className="text-xl font-medium">No jobs found</h3>
-          <p className="text-muted-foreground mt-2">
-            Try adjusting your search criteria or check back later for new opportunities.
-          </p>
+      {loading && jobs.length === 0 ? (
+        <div
+          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          aria-busy="true"
+          aria-live="polite"
+        >
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-64 rounded-lg" />
+          ))}
         </div>
+      ) : error && jobs.length === 0 ? (
+        <ErrorState
+          title="Unable to load jobs"
+          description="We couldn't retrieve the job listings right now. Please try again."
+          onRetry={loadJobs}
+        />
+      ) : jobs.length === 0 ? (
+        <EmptyState
+          icon={Briefcase}
+          title="No jobs found"
+          description={
+            hasActiveFilters
+              ? 'Nothing matches your current filters. Try broadening your search or clearing the filters.'
+              : 'There are no open positions right now. Check back soon — new jobs are posted regularly.'
+          }
+          action={
+            hasActiveFilters ? (
+              <Button variant="outline" size="sm" onClick={clearFilters}>
+                Clear filters
+              </Button>
+            ) : undefined
+          }
+        />
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {jobs.map((job) => (
               <JobCard key={job.id} job={job} />
             ))}
           </div>
 
-          <div className="flex justify-center mt-8" ref={ref}>
+          <div className="mt-8 flex justify-center" ref={ref}>
             {loading && (
               <Button disabled variant="outline" className="w-full max-w-sm">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

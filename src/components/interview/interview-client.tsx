@@ -84,8 +84,8 @@ export function InterviewClient({
             <h2 className="text-2xl font-bold mt-4">Ready to begin your interview?</h2>
           </div>
           <p className="text-muted-foreground mb-6">
-            Our AI-powered system will guide you through a series of questions to assess your skills
-            and experience for this position. Please ensure your camera and microphone are working
+            The interviewer will guide you through a series of questions to assess your skills and
+            experience for this position. Please ensure your camera and microphone are working
             properly.
           </p>
         </div>

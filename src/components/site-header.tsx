@@ -1,4 +1,7 @@
 'use client';
+
+import { LanguageSelector } from '@/components/language-selector';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useHeaderTitle } from '@/provider/_header-title-provider';
@@ -10,7 +13,11 @@ export function SiteHeader() {
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
-        <h1 className="text-base font-medium">{title}</h1>
+        <h1 className="font-display text-base font-medium tracking-tight">{title}</h1>
+        <div className="ml-auto flex items-center gap-1">
+          <LanguageSelector />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

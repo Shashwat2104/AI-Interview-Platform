@@ -24,12 +24,6 @@ export default function PrivacyPolicyPage() {
     <div className="min-h-screen bg-background relative">
       {/* Background gradients and patterns */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background"></div>
-        <div className="absolute top-0 left-1/4 h-[350px] w-[350px] rounded-full bg-purple-600/10 dark:bg-purple-500/10 blur-[120px] animate-pulse-slow"></div>
-        <div
-          className="absolute bottom-0 right-1/4 h-[300px] w-[300px] rounded-full bg-blue-600/10 dark:bg-blue-500/10 blur-[120px] animate-pulse-slow"
-          style={{ animationDelay: '2.5s' }}
-        ></div>
         <div className="h-full w-full bg-[url('/patterns/waves.svg')] bg-repeat opacity-5"></div>
       </div>
 

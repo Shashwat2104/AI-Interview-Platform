@@ -154,19 +154,6 @@ export default function ContactPage() {
     <div className="min-h-screen bg-background relative">
       {/* Background gradients and patterns */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full bg-blue-600/30 dark:bg-blue-500/30 blur-[120px] animate-pulse-slow"></div>
-        <div
-          className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-purple-600/30 dark:bg-purple-500/30 blur-[120px] animate-pulse-slow"
-          style={{ animationDelay: '2s' }}
-        ></div>
-        <div
-          className="absolute top-1/2 right-1/4 h-[300px] w-[300px] rounded-full bg-indigo-600/30 dark:bg-indigo-500/30 blur-[100px] animate-pulse-slow"
-          style={{ animationDelay: '1s' }}
-        ></div>
-        <div
-          className="absolute top-1/3 left-1/4 h-[250px] w-[250px] rounded-full bg-cyan-600/30 dark:bg-cyan-500/30 blur-[90px] animate-pulse-slow"
-          style={{ animationDelay: '3s' }}
-        ></div>
         <div className="h-full w-full bg-[url('/patterns/grid.svg')] bg-repeat opacity-20"></div>
       </div>
 

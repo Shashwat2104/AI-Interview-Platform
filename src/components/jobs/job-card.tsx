@@ -40,7 +40,7 @@ export function JobCard({ job }: JobCardProps) {
   const isDashboard = pathname?.startsWith('/dashboard');
 
   return (
-    <Card className="h-full transition-all duration-300 hover:shadow-md hover:border-primary/30 bg-background/70 backdrop-blur-sm border border-primary/10">
+    <Card className="h-full transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md hover:shadow-primary/10 dark:hover:border-brand-cyan/40">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
           <CardTitle className="text-xl font-semibold line-clamp-1">{job.title}</CardTitle>

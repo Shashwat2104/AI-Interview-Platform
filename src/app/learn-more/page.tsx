@@ -101,13 +101,7 @@ export default function LearnMorePage() {
       {/* Hero Section */}
       <section className="relative py-10 overflow-hidden">
         {/* Animated background */}
-        <div className="absolute inset-0 z-0 opacity-40">
-          <div className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full bg-blue-600/30 dark:bg-blue-500/30 blur-[120px] animate-pulse-slow"></div>
-          <div
-            className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-purple-600/30 dark:bg-purple-500/30 blur-[120px] animate-pulse-slow"
-            style={{ animationDelay: '2s' }}
-          ></div>
-        </div>
+        <div className="absolute inset-0 z-0 opacity-40"></div>
 
         {/* Back button and content */}
         <div className="container mx-auto relative z-10">
@@ -151,10 +145,7 @@ export default function LearnMorePage() {
                 variants={fadeIn}
                 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
               >
-                {t('learnMoreTitle')}{' '}
-                <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent animate-gradient">
-                  Hirelytics
-                </span>
+                {t('learnMoreTitle')} <span className="text-primary">Hirelytics</span>
               </motion.h1>
 
               <motion.p variants={fadeIn} className="text-xl text-muted-foreground mb-8 max-w-3xl">
@@ -192,7 +183,7 @@ export default function LearnMorePage() {
             </motion.div>
 
             <motion.div
-              className="rounded-xl bg-gradient-to-br from-blue-500/20 via-primary/20 to-purple-500/20 p-1"
+              className="rounded-xl border p-1"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -220,13 +211,7 @@ export default function LearnMorePage() {
 
       {/* Platform Benefits Section */}
       <section className="py-16 relative overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 right-0 h-[300px] w-[300px] rounded-full bg-blue-600/10 dark:bg-blue-500/10 blur-[100px] animate-pulse-slow"></div>
-          <div
-            className="absolute bottom-1/4 left-0 h-[250px] w-[250px] rounded-full bg-purple-600/10 dark:bg-purple-500/10 blur-[100px] animate-pulse-slow"
-            style={{ animationDelay: '2s' }}
-          ></div>
-        </div>
+        <div className="absolute inset-0 z-0"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -250,7 +235,7 @@ export default function LearnMorePage() {
             {benefitColumns.map((column: BenefitColumn, i: number) => (
               <motion.div
                 key={i}
-                className={`rounded-xl bg-gradient-to-br ${column.gradient} p-1 h-full`}
+                className="rounded-xl border p-1 h-full"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -281,7 +266,7 @@ export default function LearnMorePage() {
       </section>
 
       {/* Technology Section */}
-      <section className="py-16 bg-gradient-to-b from-background via-secondary/10 to-background relative overflow-hidden">
+      <section className="py-16 bg-muted/30 relative">
         <div className="absolute inset-0 z-0">
           <div className="h-full w-full bg-[url('/patterns/circuit.svg')] bg-repeat opacity-5"></div>
         </div>
@@ -312,7 +297,6 @@ export default function LearnMorePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ y: -5 }}
                 >
                   <h3 className="text-xl font-bold mb-3">{tech.title}</h3>
                   <p className="text-muted-foreground">{tech.description}</p>
@@ -326,11 +310,6 @@ export default function LearnMorePage() {
       {/* FAQ Section */}
       <section className="py-16 relative overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute top-0 right-0 h-[400px] w-[400px] rounded-full bg-blue-600/20 dark:bg-blue-500/20 blur-[100px] animate-pulse-slow"></div>
-          <div
-            className="absolute bottom-0 left-0 h-[300px] w-[300px] rounded-full bg-purple-600/20 dark:bg-purple-500/20 blur-[100px] animate-pulse-slow"
-            style={{ animationDelay: '2s' }}
-          ></div>
           <div className="h-full w-full bg-[url('/patterns/dots.svg')] bg-repeat opacity-10"></div>
         </div>
 
@@ -371,7 +350,7 @@ export default function LearnMorePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-primary/80 via-blue-500/80 to-purple-500/80 text-white relative overflow-hidden">
+      <section className="py-16 bg-primary text-primary-foreground relative">
         <div className="absolute inset-0 bg-grid-white/10 bg-[length:20px_20px] opacity-10"></div>
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-0 h-full w-full bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.2)_0%,transparent_50%)]"></div>

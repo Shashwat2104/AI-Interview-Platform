@@ -26,11 +26,6 @@ export default function AboutPage() {
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Background gradients and patterns */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-1/4 h-[350px] w-[350px] rounded-full bg-purple-600/10 dark:bg-purple-500/10 blur-[120px] animate-pulse-slow"></div>
-        <div
-          className="absolute bottom-0 right-1/4 h-[300px] w-[300px] rounded-full bg-blue-600/10 dark:bg-blue-500/10 blur-[120px] animate-pulse-slow"
-          style={{ animationDelay: '2.5s' }}
-        ></div>
         <div className="h-full w-full bg-[url('/patterns/waves.svg')] bg-repeat opacity-5"></div>
       </div>
 
@@ -134,7 +129,7 @@ export default function AboutPage() {
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">{t('cta.description')}</p>
             <Link
               href="/register"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-primary via-blue-500 to-purple-500 px-8 py-3 text-sm font-medium text-white shadow hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 transform hover:-translate-y-1"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground px-8 py-3 text-sm font-medium shadow-sm transition-colors hover:bg-primary/90"
             >
               <Sparkles size={16} className="relative z-10" />
               <span className="relative z-10">{common('buttons.getStarted')}</span>

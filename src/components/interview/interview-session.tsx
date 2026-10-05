@@ -16,6 +16,16 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import {
@@ -70,6 +80,7 @@ export function InterviewSession({
   const [selectedVideoDevice, setSelectedVideoDevice] = useState<string | null>(null);
   const [selectedAudioDevice, setSelectedAudioDevice] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showRestartConfirm, setShowRestartConfirm] = useState(false);
   const [isMonitoring, setIsMonitoring] = useState(cameraMonitoring);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isTabFocused, setIsTabFocused] = useState(true);
@@ -714,15 +725,7 @@ export function InterviewSession({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
                 <DropdownMenuItem
-                  onClick={async () => {
-                    if (
-                      window.confirm(
-                        'Are you sure you want to restart this interview? This will clear all current conversation history.'
-                      )
-                    ) {
-                      await restartInterview();
-                    }
-                  }}
+                  onClick={() => setShowRestartConfirm(true)}
                   disabled={isInitializing}
                   className="flex items-center gap-2 cursor-pointer"
                 >
@@ -740,29 +743,51 @@ export function InterviewSession({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            <AlertDialog open={showRestartConfirm} onOpenChange={setShowRestartConfirm}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Restart interview?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will clear the current conversation and start over from the first question.
+                    This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={async () => {
+                      await restartInterview();
+                    }}
+                  >
+                    Restart
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
 
           <div className="flex gap-1">
             {isInitializing && (
-              <div className="text-xs px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 rounded-full">
+              <div className="text-xs px-2 py-1 bg-info/10 text-info rounded-full">
                 Initializing...
               </div>
             )}
 
             {isAudioPlaying && !isInitializing && (
-              <div className="text-xs px-2 py-1 bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 rounded-full">
+              <div className="text-xs px-2 py-1 bg-warning/10 text-warning rounded-full">
                 AI is talking...
               </div>
             )}
 
             {!isUserTurn && !isInitializing && !isAudioPlaying && (
               <div className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">
-                AI is responding...
+                Preparing next question...
               </div>
             )}
 
             {isUserTurn && messages.length > 0 && !isInitializing && !isAudioPlaying && (
-              <div className="text-xs px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full whitespace-nowrap animate-subtle-bounce">
+              <div className="text-xs px-2 py-1 bg-success/10 text-success rounded-full whitespace-nowrap animate-subtle-bounce">
                 Your turn
               </div>
             )}
@@ -776,7 +801,7 @@ export function InterviewSession({
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex ${
+                  className={`flex animate-in fade-in slide-in-from-bottom-1 [animation-duration:300ms] ${
                     message.sender === 'system'
                       ? 'justify-center'
                       : message.sender === 'ai'
@@ -787,7 +812,7 @@ export function InterviewSession({
                   {message.sender === 'system' ? (
                     // System message (centered, special styling)
                     <div className="w-full max-w-[90%] px-4 py-3 my-2 rounded-lg bg-muted/80 border border-border/80 shadow-sm">
-                      <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">
+                      <div className="text-xs font-semibold text-muted-foreground mb-1">
                         System Information
                       </div>
                       <div className="text-sm prose-sm prose-headings:text-primary prose-headings:my-1 prose-p:my-1 prose-hr:my-2 markdown-content">

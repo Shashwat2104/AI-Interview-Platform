@@ -1,0 +1,327 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Hirelytics Hiring Pipeline",
+    "quality_profile": "showcase",
+    "output": "docs/hirelytics-hiring-workflow.html",
+    "views": [
+      {
+        "id": "post-to-screen",
+        "label": "Post to screen",
+        "focus": [
+          "post_job",
+          "apply",
+          "resume_upload",
+          "screen"
+        ],
+        "note": "From job creation with an AI-generated description to the Gemini match score."
+      },
+      {
+        "id": "assess",
+        "label": "AI assessment",
+        "focus": [
+          "screen",
+          "schedule",
+          "interview",
+          "monitoring",
+          "report"
+        ],
+        "note": "How the AI interview session produces monitored, structured evidence."
+      },
+      {
+        "id": "decision",
+        "label": "Human decision",
+        "focus": [
+          "report",
+          "review",
+          "decision",
+          "notify"
+        ],
+        "note": "The recruiter stays the decision maker; candidates are kept informed."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "recruiter",
+      "label": "Recruiter"
+    },
+    {
+      "id": "candidate",
+      "label": "Candidate"
+    },
+    {
+      "id": "platform",
+      "label": "Hirelytics Platform"
+    }
+  ],
+  "phases": [
+    {
+      "id": "attract",
+      "label": "Attract",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "screen",
+      "label": "Screen",
+      "fromCol": 2,
+      "toCol": 2,
+      "variant": "emphasis"
+    },
+    {
+      "id": "assess",
+      "label": "Assess",
+      "fromCol": 3,
+      "toCol": 4,
+      "variant": "dashed"
+    },
+    {
+      "id": "decide",
+      "label": "Decide",
+      "fromCol": 5,
+      "toCol": 5
+    }
+  ],
+  "groups": [
+    {
+      "id": "ai_screening",
+      "label": "AI screening",
+      "lane": "platform",
+      "fromCol": 1,
+      "toCol": 2,
+      "variant": "emphasis"
+    },
+    {
+      "id": "interview_env",
+      "label": "Interview environment",
+      "lane": "platform",
+      "fromCol": 3,
+      "toCol": 4,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "post_job",
+    "apply",
+    "resume_upload",
+    "screen",
+    "schedule",
+    "interview",
+    "report",
+    "review",
+    "decision"
+  ],
+  "nodes": [
+    {
+      "id": "post_job",
+      "lane": "recruiter",
+      "col": 0,
+      "type": "frontend",
+      "label": "Create Job",
+      "sublabel": "Gemini-generated description",
+      "tag": "/api/ai/generate-job-description",
+      "width": 150
+    },
+    {
+      "id": "apply",
+      "lane": "candidate",
+      "col": 1,
+      "type": "external",
+      "label": "Apply via Link",
+      "sublabel": "unique job URL",
+      "width": 150
+    },
+    {
+      "id": "resume_upload",
+      "lane": "platform",
+      "col": 1,
+      "type": "cloud",
+      "label": "Resume Intake",
+      "sublabel": "S3 presigned PUT",
+      "width": 150
+    },
+    {
+      "id": "screen",
+      "lane": "platform",
+      "col": 2,
+      "type": "backend",
+      "label": "Resume Screening",
+      "sublabel": "Gemini match score",
+      "brand": "google-gemini",
+      "tag": "match 0–100",
+      "width": 150
+    },
+    {
+      "id": "schedule",
+      "lane": "candidate",
+      "col": 2,
+      "type": "external",
+      "label": "Book Slot",
+      "sublabel": "Cal.com embed",
+      "width": 150
+    },
+    {
+      "id": "interview",
+      "lane": "candidate",
+      "col": 3,
+      "type": "backend",
+      "label": "AI Interview Session",
+      "sublabel": "Gemini chat · voice",
+      "brand": "google-gemini",
+      "tag": "timed",
+      "width": 162
+    },
+    {
+      "id": "monitoring",
+      "lane": "platform",
+      "col": 3,
+      "type": "cloud",
+      "label": "Session Monitoring",
+      "sublabel": "webcam snapshots → S3",
+      "width": 150
+    },
+    {
+      "id": "report",
+      "lane": "platform",
+      "col": 4,
+      "type": "backend",
+      "label": "Scoring & Report",
+      "sublabel": "evaluate → feedback",
+      "brand": "google-gemini",
+      "width": 150
+    },
+    {
+      "id": "review",
+      "lane": "recruiter",
+      "col": 4,
+      "type": "security",
+      "label": "Recruiter Review",
+      "sublabel": "applications dashboard",
+      "tag": "human gate",
+      "width": 150
+    },
+    {
+      "id": "decision",
+      "lane": "recruiter",
+      "col": 5,
+      "type": "frontend",
+      "label": "Hiring Decision",
+      "sublabel": "accept / reject",
+      "width": 150
+    },
+    {
+      "id": "notify",
+      "lane": "platform",
+      "col": 5,
+      "type": "external",
+      "label": "Notify Candidate",
+      "sublabel": "Resend status email",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "post-to-apply",
+      "from": "post_job",
+      "to": "apply",
+      "label": "unique application link"
+    },
+    {
+      "id": "apply-to-upload",
+      "from": "apply",
+      "to": "resume_upload",
+      "label": "resume"
+    },
+    {
+      "id": "upload-to-screen",
+      "from": "resume_upload",
+      "to": "screen",
+      "label": "parsed resume"
+    },
+    {
+      "id": "screen-to-schedule",
+      "from": "screen",
+      "to": "schedule",
+      "label": "shortlisted",
+      "role": "branch"
+    },
+    {
+      "id": "schedule-to-interview",
+      "from": "schedule",
+      "to": "interview",
+      "label": "slot booked"
+    },
+    {
+      "id": "interview-to-monitoring",
+      "from": "interview",
+      "to": "monitoring",
+      "label": "snapshots every 30s",
+      "variant": "dashed",
+      "role": "async"
+    },
+    {
+      "id": "interview-to-report",
+      "from": "interview",
+      "to": "report",
+      "label": "transcript"
+    },
+    {
+      "id": "monitoring-to-report",
+      "from": "monitoring",
+      "to": "report",
+      "label": "evidence",
+      "variant": "dashed"
+    },
+    {
+      "id": "report-to-review",
+      "from": "report",
+      "to": "review",
+      "label": "report + match"
+    },
+    {
+      "id": "review-to-decision",
+      "from": "review",
+      "to": "decision",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "decision-to-notify",
+      "from": "decision",
+      "to": "notify",
+      "label": "outcome",
+      "role": "branch"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "AI does the reading, humans decide",
+      "items": [
+        "Gemini scores every resume against the job before a human looks at it",
+        "The interview transcript, match score, and monitoring evidence land in one report",
+        "Accept / reject stays a recruiter decision, never an automated one"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Evidence trail",
+      "items": [
+        "Resumes are stored in AWS S3 through presigned uploads",
+        "Webcam snapshots are captured every 30 seconds during the interview",
+        "Each application ends with structured feedback the candidate can read"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Candidate experience",
+      "items": [
+        "One unique link per job — apply without an account",
+        "Cal.com embed books the interview slot",
+        "Resend email carries the final outcome"
+      ]
+    }
+  ]
+}
