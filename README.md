@@ -4,7 +4,7 @@
 
 **Live deployment: [shashwat-ai-interview-platform.vercel.app](https://shashwat-ai-interview-platform.vercel.app/)**
 
-[Architecture Reference](./docs/hirelytics-architecture.html) · [Hiring Workflow](./docs/hirelytics-hiring-workflow.html) · [API Architecture](#api-architecture)
+[Architecture Reference](https://shashwat-ai-interview-platform.vercel.app/docs/hirelytics-architecture.html) · [Hiring Workflow](https://shashwat-ai-interview-platform.vercel.app/docs/hirelytics-hiring-workflow.html) · [API Architecture](#api-architecture)
 
 ---
 
@@ -528,12 +528,11 @@ highest-value first addition.
 For the complete interactive architecture — component map, hiring-pipeline workflow, guided
 views, and relationship tracing — see:
 
-**[Open the Interactive Architecture →](./docs/hirelytics-architecture.html)**
-**[Open the Hiring Workflow →](./docs/hirelytics-hiring-workflow.html)**
+**[Open the Interactive Architecture →](https://shashwat-ai-interview-platform.vercel.app/docs/hirelytics-architecture.html)**
+**[Open the Hiring Workflow →](https://shashwat-ai-interview-platform.vercel.app/docs/hirelytics-hiring-workflow.html)**
 
-These artifacts are generated from the repository with [Archify](https://github.com/tt-a1i/archify)
-(spec sources: `docs/hirelytics-architecture.json`, `docs/hirelytics-hiring-workflow.json`) and
-complement the Mermaid diagrams in this README.
+The artifacts are served from `public/docs/` so they resolve on the deployed site; the editable
+spec sources live in `docs/`.
 
 ## Contributing
 
