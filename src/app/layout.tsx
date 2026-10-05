@@ -70,6 +70,14 @@ export default async function RootLayout({
         <meta name="author" content="Shashwat" />
         <meta property="og:site_name" content="Hirelytics by Shashwat" />
         <meta name="twitter:creator" content="@Shashwat" />
+        {/* Reveal sections ship hidden and are un-hidden by an observer; without
+            JS they must still be readable. */}
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html:
+              '<style>.reveal{opacity:1!important;transform:none!important;filter:none!important}.hero-word{animation:none!important;filter:none!important;transform:none!important}</style>',
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased`}

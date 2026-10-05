@@ -68,10 +68,7 @@ export default function RecruiterLoginPage() {
           colorScheme="purple"
           footer={footerContent}
         >
-          <LoginForm
-            role="recruiter"
-            demoAccounts={[RECRUITER_DEMO, CANDIDATE_DEMO]}
-          />
+          <LoginForm role="recruiter" demoAccounts={[RECRUITER_DEMO, CANDIDATE_DEMO]} />
         </AnimatedAuthCard>
       </div>
     </AnimatedBackground>

@@ -1,6 +1,4 @@
-'use client';
-
-import { Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -8,7 +6,7 @@ export function Footer() {
   const t = useTranslations('HomePage');
 
   return (
-    <footer className="w-full bg-card py-16 relative overflow-hidden">
+    <footer className="w-full bg-card py-16 relative overflow-hidden border-t">
       {/* Developer Credit */}
       <div className="absolute top-2 right-4 z-20 text-xs text-muted-foreground">
         Developed by{' '}
@@ -22,25 +20,44 @@ export function Footer() {
         </a>
       </div>
       {/* Background gradients and patterns */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="h-full w-full bg-[url('/patterns/dots.svg')] bg-repeat opacity-10"></div>
-
-        {/* Additional light effects */}
-
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(var(--primary-rgb),0.05),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_oklab,var(--brand-cyan)_8%,transparent),transparent_50%)]"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="mb-12 flex flex-col items-center justify-center text-center">
-          <div className="mb-6 flex items-center justify-center">
-            <div className="mr-2 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-              <Sparkles className="text-primary" size={20} />
+          <div className="mb-4 flex items-center justify-center gap-2.5">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-border shadow-xs">
+              <Image
+                src="/images/hirelytics-logo.svg"
+                alt="Hirelytics logo"
+                width={24}
+                height={24}
+                className="size-6 rounded-md"
+              />
             </div>
-            <h2 className="text-2xl font-bold">{t('title')}</h2>
+            <h2 className="text-2xl font-bold font-display tracking-tight text-foreground">
+              {t('title')}
+            </h2>
           </div>
-          <p className="max-w-md text-center text-muted-foreground">{t('footer.description')}</p>
-          <div className="mt-4 text-sm">
-            <a href="/credits" className="underline hover:text-primary">
+          <p className="max-w-md text-center text-sm text-muted-foreground leading-relaxed">
+            {t('footer.description')}
+          </p>
+
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-3 py-1 font-mono text-success">
+              <span className="relative flex size-2">
+                <span className="live-anim absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-success" />
+              </span>
+              All Systems Operational &bull; &lt; 18ms Latency
+            </span>
+            <span aria-hidden="true" className="h-3 w-px bg-border hidden sm:block" />
+            <a
+              href="/credits"
+              className="text-muted-foreground hover:text-primary transition-colors underline"
+            >
               Meet the Developer
             </a>
           </div>

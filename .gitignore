@@ -55,3 +55,6 @@ test & logs
 scripts
 .stitch
 start.log
+.screenshots-prod
+.screenshots-test
+.screenshots

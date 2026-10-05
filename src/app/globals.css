@@ -198,12 +198,22 @@
  * Fast for micro-feedback, normal for component states, slow for entrances.
  */
 :root {
+  --duration-instant: 90ms;
   --duration-fast: 150ms;
   --duration-normal: 250ms;
   --duration-slow: 400ms;
+  --duration-story: 700ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-enter: cubic-bezier(0.19, 1, 0.22, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  /* Gentle overshoot for arrival moments (chips, nodes) — never for large surfaces */
+  --ease-spring: cubic-bezier(0.34, 1.28, 0.64, 1);
+  /* Motion geometry: shared distances, blur and scale for every entrance */
+  --motion-rise: 12px;
+  --motion-rise-lg: 22px;
+  --motion-blur: 7px;
+  --motion-scale-from: 0.96;
+  --stagger-step: 55ms;
 }
 
 /* Grouped entrance: content rises in as a block, not element by element */
@@ -291,22 +301,25 @@
   );
 }
 
-/* Hero headline: words rise in with a blur-to-sharp settle */
+/*
+ * Hero headline: words rise in with a blur-to-sharp settle.
+ * Deliberately animates transform + filter only (never opacity) so the H1 is
+ * painted on the first frame and the Largest Contentful Paint is not delayed
+ * by the entrance choreography.
+ */
 @keyframes word-in {
   from {
-    opacity: 0;
-    transform: translateY(12px);
-    filter: blur(6px);
+    transform: translate3d(0, 0.36em, 0);
+    filter: blur(var(--motion-blur));
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
     filter: blur(0);
   }
 }
 .hero-word {
   display: inline-block;
-  animation: word-in 600ms var(--ease-enter) both;
+  animation: word-in var(--duration-story) var(--ease-enter) both;
 }
 
 /* Rubric scales fill from the left, like an assessment being scored */
@@ -557,3 +570,646 @@
 .animate-subtle-bounce {
   animation: subtleBounce 2s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   MOTION SYSTEM v2 — one language, four intensities.
+
+   Micro (90–150ms)      buttons, icons, toggles, press
+   Component (250ms)     cards, menus, tabs, header condense
+   Section (400–700ms)   hero entrance, section reveals, product UI steps
+   Story (700ms+, loops) hero environment, orbit geometry, live data
+
+   Every rule animates transform / opacity / filter only — never width,
+   height, margin, padding, top or left — so animation stays off the layout
+   path and never causes CLS. Continuous loops are gated by [data-live].
+   ========================================================================== */
+
+/* --- Page-load choreography ------------------------------------------------ */
+
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--motion-rise-lg), 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/*
+ * Transform-only arrival for large LCP candidates (hero panel): the surface is
+ * painted immediately and merely settles into place.
+ */
+@keyframes settle-in {
+  from {
+    transform: translate3d(0, 18px, 0) scale(0.985);
+  }
+  to {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.enter {
+  animation: enter-up var(--duration-slow) var(--ease-enter) both;
+}
+.enter-fade {
+  animation: enter-fade var(--duration-slow) var(--ease-enter) both;
+}
+.enter-settle {
+  animation: settle-in var(--duration-story) var(--ease-enter) both;
+}
+.enter-d1 {
+  animation-delay: calc(var(--stagger-step) * 1);
+}
+.enter-d2 {
+  animation-delay: calc(var(--stagger-step) * 2);
+}
+.enter-d3 {
+  animation-delay: calc(var(--stagger-step) * 3);
+}
+.enter-d4 {
+  animation-delay: calc(var(--stagger-step) * 4);
+}
+.enter-d5 {
+  animation-delay: calc(var(--stagger-step) * 5);
+}
+.enter-d6 {
+  animation-delay: calc(var(--stagger-step) * 6);
+}
+.enter-d8 {
+  animation-delay: calc(var(--stagger-step) * 8);
+}
+
+/* --- Scroll reveal (activated by an IntersectionObserver in Reveal) -------- */
+
+.reveal {
+  opacity: 0;
+  transition:
+    opacity var(--duration-slow) var(--ease-enter) var(--reveal-delay, 0ms),
+    transform var(--duration-slow) var(--ease-enter) var(--reveal-delay, 0ms),
+    filter var(--duration-slow) var(--ease-enter) var(--reveal-delay, 0ms);
+}
+.reveal[data-reveal='up'] {
+  transform: translate3d(0, var(--motion-rise), 0);
+}
+.reveal[data-reveal='down'] {
+  transform: translate3d(0, calc(var(--motion-rise) * -1), 0);
+}
+.reveal[data-reveal='left'] {
+  transform: translate3d(calc(var(--motion-rise-lg) * -1), 0, 0);
+}
+.reveal[data-reveal='right'] {
+  transform: translate3d(var(--motion-rise-lg), 0, 0);
+}
+.reveal[data-reveal='scale'] {
+  transform: scale(var(--motion-scale-from));
+}
+.reveal[data-reveal='blur'] {
+  transform: translate3d(0, var(--motion-rise), 0);
+  filter: blur(var(--motion-blur));
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+  will-change: auto;
+}
+
+/* --- Brand atmosphere ----------------------------------------------------- */
+
+/*
+ * The logo's deep ground, expanded into an environment (hero, CTA).
+ * The base gradient is vertical so the environment's top edge is a flat,
+ * predictable brand-deep — the landing header matches it exactly and the two
+ * read as one continuous field. Interest comes from the radial light sources.
+ */
+.brand-field {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(1100px 620px at 78% 8%, color-mix(in oklab, var(--brand-cyan) 24%, transparent), transparent 62%),
+    radial-gradient(900px 620px at 6% 108%, color-mix(in oklab, #60a5fa 22%, transparent), transparent 60%),
+    linear-gradient(180deg, var(--brand-deep) 0%, #0d4166 52%, var(--brand-blue) 100%);
+}
+.dark .brand-field {
+  background:
+    radial-gradient(1100px 620px at 78% 8%, color-mix(in oklab, var(--brand-cyan) 20%, transparent), transparent 62%),
+    radial-gradient(900px 620px at 6% 108%, color-mix(in oklab, #60a5fa 16%, transparent), transparent 60%),
+    linear-gradient(180deg, #071b2b 0%, #0b3652 52%, #12325a 100%);
+}
+
+/* Faint brand grid, masked to fade before it reads as a texture */
+.grid-veil {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, #ffffff 7%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, #ffffff 7%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(120% 85% at 50% 0%, #000 20%, transparent 72%);
+}
+
+/* Branded light sources (transform/opacity drift only) */
+.glow-cyan {
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--brand-cyan) 26%, transparent), transparent 72%);
+}
+.glow-blue {
+  background: radial-gradient(closest-side, color-mix(in oklab, #60a5fa 22%, transparent), transparent 72%);
+}
+.glow-drift {
+  animation: ambient-drift 26s ease-in-out infinite;
+}
+.glow-drift-slow {
+  animation: ambient-drift 38s ease-in-out infinite reverse;
+}
+
+/* Light-mode sections: brand-tinted canvas, not plain white */
+.atmosphere-light {
+  background:
+    radial-gradient(900px 520px at 10% -12%, color-mix(in oklab, var(--brand-cyan) 13%, transparent), transparent 66%),
+    radial-gradient(760px 460px at 94% 2%, color-mix(in oklab, var(--brand-blue) 8%, transparent), transparent 62%),
+    linear-gradient(180deg, #f7fbfd 0%, #f8fafb 42%, #f3f9fc 100%);
+}
+.dark .atmosphere-light {
+  background:
+    radial-gradient(900px 520px at 10% -12%, color-mix(in oklab, var(--brand-cyan) 9%, transparent), transparent 66%),
+    radial-gradient(760px 460px at 94% 2%, color-mix(in oklab, var(--brand-blue) 12%, transparent), transparent 62%),
+    linear-gradient(180deg, #081521 0%, #0a1621 42%, #091724 100%);
+}
+
+/* A banded surface for alternating sections, tinted with the logo's sky */
+.band-tint {
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--brand-cyan) 5%, transparent), transparent 60%),
+    var(--background);
+}
+.dark .band-tint {
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--brand-cyan) 6%, transparent), transparent 60%),
+    var(--background);
+}
+
+/* --- Orbital geometry (from the logo's dashed scan ring) ------------------ */
+
+@keyframes orbit-spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+.orbit-ring-rev {
+  animation: orbit-spin-rev 64s linear infinite;
+}
+
+/* A rotating cyan arc: the "assessment in progress" sweep */
+@keyframes arc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.orbit-arc {
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 210deg,
+    color-mix(in oklab, var(--brand-cyan) 62%, transparent) 320deg,
+    transparent 355deg
+  );
+  mask: radial-gradient(closest-side, transparent 76%, #000 78%);
+  animation: arc-spin 14s linear infinite;
+}
+
+/* Expanding ring pulse — an assessment ping */
+@keyframes ring-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+.ring-pulse {
+  animation: ring-pulse 3.6s var(--ease-enter) infinite;
+}
+
+/* Node dots that ride the orbit */
+@keyframes node-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.node-orbit {
+  animation: node-orbit 22s linear infinite;
+}
+.node-orbit-rev {
+  animation: node-orbit 34s linear infinite reverse;
+}
+
+/* Gentle float for floating UI layers (never on the LCP surface itself) */
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+.float-y {
+  animation: float-y 7s ease-in-out infinite;
+}
+.float-y-slow {
+  animation: float-y 11s ease-in-out infinite;
+}
+
+/* --- Live product UI ------------------------------------------------------ */
+
+/* Voice meter: transform-only waveform */
+@keyframes meter {
+  0%,
+  100% {
+    transform: scaleY(0.28);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.meter-bar {
+  transform-origin: center bottom;
+  animation: meter var(--meter-speed, 900ms) ease-in-out infinite;
+}
+
+/* AI answer typing: clip reveal in steps, plus a blinking caret */
+@keyframes type-sweep {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.type-line {
+  animation: type-sweep var(--type-duration, 1.6s) steps(var(--type-steps, 30), end) both;
+  animation-delay: var(--type-delay, 0ms);
+}
+@keyframes caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.type-caret {
+  animation: caret 1s steps(1, end) infinite;
+}
+
+/* Notification chip arrival */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+.toast-in {
+  animation: toast-in var(--duration-slow) var(--ease-spring) var(--toast-delay, 0ms) both;
+}
+
+/* Chip / verdict arrival with a gentle overshoot */
+@keyframes chip-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.chip-pop {
+  animation: chip-pop var(--duration-normal) var(--ease-spring) var(--chip-delay, 0ms) both;
+}
+
+/* Shimmer for pending lines (skeletons, "analyzing" rows) */
+@keyframes shimmer {
+  from {
+    transform: translate3d(-110%, 0, 0);
+  }
+  to {
+    transform: translate3d(210%, 0, 0);
+  }
+}
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    color-mix(in oklab, var(--brand-cyan) 22%, transparent) 50%,
+    transparent 80%
+  );
+  animation: shimmer 1.9s var(--ease-standard) infinite;
+  animation-delay: var(--shimmer-delay, 0ms);
+}
+
+/* --- Card interactions (hierarchy: not every card gets the same effect) --- */
+
+.card-interactive {
+  transition:
+    transform var(--duration-normal) var(--ease-standard),
+    border-color var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-normal) var(--ease-standard),
+    background-color var(--duration-normal) var(--ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-interactive:hover {
+    transform: translate3d(0, -3px, 0);
+  }
+
+  /* Cursor-following light, softened for content cards */
+  .spotlight-soft::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-standard);
+    background: radial-gradient(
+      260px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--brand-cyan) 9%, transparent),
+      transparent 68%
+    );
+  }
+  .spotlight-soft:hover::after {
+    opacity: 1;
+  }
+
+  /* Light beam that sweeps a card's top edge on hover */
+  .card-beam::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--brand-cyan) 70%, transparent),
+      transparent
+    );
+    transform: translate3d(-60%, 0, 0);
+    opacity: 0;
+    transition:
+      transform var(--duration-story) var(--ease-enter),
+      opacity var(--duration-normal) var(--ease-standard);
+    pointer-events: none;
+  }
+  .card-beam:hover::before {
+    transform: translate3d(60%, 0, 0);
+    opacity: 1;
+  }
+}
+
+/* --- Button interactions -------------------------------------------------- */
+
+/* Light sweep across primary CTAs (fast, pointer-only) */
+.sweep {
+  position: relative;
+  overflow: hidden;
+}
+.sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 32%,
+    color-mix(in oklab, #ffffff 30%, transparent) 50%,
+    transparent 68%
+  );
+  transform: translate3d(-130%, 0, 0);
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sweep:hover::after {
+    animation: sweep-pass 620ms var(--ease-enter);
+  }
+}
+@keyframes sweep-pass {
+  from {
+    transform: translate3d(-130%, 0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(130%, 0, 0);
+    opacity: 1;
+  }
+}
+
+/* Brand glow for primary CTAs — a paint-only shadow, never a layout change */
+.btn-glow {
+  box-shadow: 0 10px 30px -12px color-mix(in oklab, var(--brand-cyan) 60%, transparent);
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+@media (hover: hover) {
+  .btn-glow:hover {
+    box-shadow: 0 14px 40px -10px color-mix(in oklab, var(--brand-cyan) 75%, transparent);
+  }
+}
+
+/* --- Activation gating ---------------------------------------------------- */
+
+/*
+ * Continuous loops only run while their section is close to the viewport.
+ * The owning component flips data-live; everything below follows.
+ */
+[data-live='false'] .live-anim,
+[data-live='false'] .live-anim::before,
+[data-live='false'] .live-anim::after {
+  animation-play-state: paused !important;
+}
+
+/* --- Theme transition (View Transitions API, enabled by ThemeToggle) ------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-reveal var(--duration-slow) var(--ease-enter);
+}
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0% at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+}
+
+/* --- Reduced motion: everything above collapses to its final state -------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .enter-fade,
+  .enter-settle,
+  .reveal,
+  .hero-word,
+  .float-y,
+  .float-y-slow,
+  .orbit-ring-rev,
+  .orbit-arc,
+  .ring-pulse,
+  .node-orbit,
+  .node-orbit-rev,
+  .meter-bar,
+  .type-line,
+  .type-caret,
+  .toast-in,
+  .chip-pop,
+  .shimmer::after,
+  .glow-drift,
+  .glow-drift-slow,
+  .sweep::after,
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+  .reveal,
+  .enter,
+  .enter-fade,
+  .enter-settle {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .type-line {
+    clip-path: none;
+  }
+  .shimmer::after {
+    opacity: 0;
+  }
+  .word-cycle > span {
+    animation: none !important;
+  }
+  .word-cycle > span:first-child {
+    opacity: 1;
+  }
+}
+
+/* --- Dynamic typography: a cycling phrase inside the hero headline ---------- */
+/*
+ * All phrases share one grid cell, so the line is sized to the widest phrase
+ * once and swapping words can never shift the layout. Opacity + transform only.
+ */
+.word-cycle {
+  display: inline-grid;
+  vertical-align: bottom;
+}
+.word-cycle > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  will-change: opacity, transform;
+  animation: word-cycle 16s var(--ease-standard) infinite both;
+  animation-delay: calc(var(--cycle-index, 0) * 4s);
+}
+/* The first phrase is part of the LCP-critical text and is visible at once. */
+.word-cycle > span:first-child {
+  opacity: 1;
+  animation-name: word-cycle-first;
+}
+@keyframes word-cycle {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.3em, 0);
+  }
+  4%,
+  20% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  24%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -0.28em, 0);
+  }
+}
+@keyframes word-cycle-first {
+  0%,
+  20% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  24%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -0.28em, 0);
+  }
+}
+
+/* --- Accordion Transitions ------------------------------------------------ */
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 240ms var(--ease-enter);
+}
+
+.animate-accordion-up {
+  animation: accordion-up 200ms var(--ease-exit);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-accordion-down,
+  .animate-accordion-up {
+    animation: none !important;
+  }
+}
+

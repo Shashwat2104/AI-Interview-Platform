@@ -32,10 +32,11 @@ function AuthCardBase({
   contentClassName,
   headerClassName,
   footerClassName,
+  colorScheme,
   ...props
 }: AuthCardProps) {
   return (
-    <Card className={cn('w-full shadow-sm', className)} {...props}>
+    <Card data-color-scheme={colorScheme} className={cn('w-full shadow-sm', className)} {...props}>
       <CardHeader
         className={cn('items-center justify-items-center pb-2 text-center', headerClassName)}
       >

@@ -3,12 +3,10 @@ import mongoose from 'mongoose';
 // Priority: an explicitly configured remote MONGODB_URI always wins. When it is
 // not set, local development falls back to the embedded MongoDB started by
 // `pnpm dev:mongo` (see scripts/dev-mongo.ts). Production never falls back.
-const LOCAL_MONGODB_URI =
-  process.env.LOCAL_MONGODB_URI || 'mongodb://127.0.0.1:27017/hirelytics';
+const LOCAL_MONGODB_URI = process.env.LOCAL_MONGODB_URI || 'mongodb://127.0.0.1:27017/hirelytics';
 
-const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  (process.env.NODE_ENV === 'production' ? undefined : LOCAL_MONGODB_URI);
+const MONGODB_URI: string =
+  process.env.MONGODB_URI || (process.env.NODE_ENV === 'production' ? '' : LOCAL_MONGODB_URI);
 
 if (!MONGODB_URI) {
   throw new Error(
